@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/SettingsBackground"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:paddingTop="10dp"
+        android:focusable="true">
+
+
+        <ImageView
+            android:paddingTop="10dp"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/right_arrow"
+            android:clickable="true"
+            android:focusable="true"
+            app:tint="@color/settingText" />
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textColor="@color/settingText"
+            android:fontFamily="@font/ys_text_medium"
+            android:textSize="@dimen/title_size_22px"
+            >
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/black_theme"
+            android:fontFamily="@font/ys_text_regular"
+            android:textSize="@dimen/title_size_16px"
+            android:paddingStart="@dimen/title_size_16px"
+            android:padding="@dimen/padding_name"
+            android:textColor="@color/settingText"
+            >
+        </TextView>
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="21dp"
+            tools:ignore="UseSwitchCompatOrMaterialXml"
+            >
+        </Switch>
+    </LinearLayout>
+
+
+    <LinearLayout
+
+        android:id="@+id/shareButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        >
+        <TextView
+            android:text="@string/share"
+            style="@style/TextStyleOptions"
+            >
+        </TextView>
+
+        <ImageView
+            style="@style/ImageOptionsStyle"
+            android:src="@drawable/share" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/reportButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        >
+        <TextView
+            android:text="@string/help"
+            style="@style/TextStyleOptions">
+        </TextView>
+        <ImageView
+            style="@style/ImageOptionsStyle"
+            android:src="@drawable/help"
+            >
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/documentsId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        >
+        <TextView
+            android:text="@string/documents"
+            style="@style/TextStyleOptions"
+            >
+        </TextView>
+        <ImageView
+            style="@style/ImageOptionsStyle"
+            android:src="@drawable/arrow_right">
+        </ImageView>
+    </LinearLayout>
+</LinearLayout>

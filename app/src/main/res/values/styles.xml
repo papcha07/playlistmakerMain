@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name = "LinearLayoutBackground">
+        <item name ="android:background">@color/background</item>
+    </style>
+
+    <style name="SettingsBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/title_size_22px</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">@color/black</item>
+        <item name = "fontFamily">@font/ys_text_medium</item>
+        <item name="elevation">40dp</item>
+    </style>
+
+    <style name="TextStyleOptions">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/title_size_16px</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:padding">@dimen/padding_name</item>
+        <item name="android:paddingStart">@dimen/title_size_16px</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+    </style>
+
+    <style name="ImageOptionsStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
+
+    <style name = "SearchEditTextStyle">
+        <item name = "android:layout_width">match_parent</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name="android:drawableStart">@drawable/search</item>
+        <item name="android:background">@drawable/background_search</item>
+        <item name="android:textColorHint">@color/text_grey</item>
+        <item name = "android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name = "drawableTint">@color/text_grey</item>
+        <item name="android:layout_gravity">start|center_vertical</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:hint">@string/search</item>
+        <item name="android:inputType">text</item>
+        <item name="maxLines">1</item>
+        <item name="android:padding">8dp</item>
+        <item name = "android:textCursorDrawable">@drawable/cursor_blue_color</item>
+        <item name = "android:textColor">@color/black</item>
+    </style>
+
+    <style name = "CloseButtonEditText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end|center_vertical</item>
+        <item name ="android:padding">10dp</item>
+        <item name = "android:src">@drawable/close_button</item>
+    </style>
+
+
+
+
+</resources>
