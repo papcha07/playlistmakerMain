@@ -7,5 +7,9 @@
     <string name="help">Написать в поддержку</string>
     <string name="documents">Пользовательское соглашение</string>
     <string name="black_theme">Темная тема</string>
+    <string name="android_course_url">https://practicum.yandex.ru/profile/android-developer/</string>
+    <string name="subject_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="text_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="offer">https://yandex.ru/legal/practicum_offer/</string>
 
 </resources>
