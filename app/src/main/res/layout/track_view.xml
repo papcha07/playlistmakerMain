@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:backgroundTint="@color/backgroundSearch"
+    >
+
+    <ImageView
+        android:id="@+id/trackImage"
+        style="@style/trackViewImageStyle"
+        >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/trackTitle"
+        style="@style/trackViewTitleStyle"
+        >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="34dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginBottom="14dp"
+        >
+    <TextView
+        android:id="@+id/trackGroup"
+        style="@style/trackViewGroupNameStyle">
+    </TextView>
+
+    <ImageView
+        style="@style/trackViewPointImageStyle">
+    </ImageView>
+
+     <TextView
+         android:id="@+id/trackTime"
+         style="@style/trackViewTimeStyle">
+     </TextView>
+    </LinearLayout>
+
+
+    <ImageView
+        style="@style/trackViewArrowStyle">
+    </ImageView>
+</androidx.cardview.widget.CardView>

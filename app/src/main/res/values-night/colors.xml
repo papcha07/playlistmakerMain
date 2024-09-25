@@ -6,5 +6,6 @@
     <color name="settingText">#FFFFFFFF</color>
     <color name = "backgroundSearch">#1A1B22</color>
     <color name="rounded_background">#FFFFFF</color>
+    <color name="group_time_viewcolor">#FFFFFF</color>
 
 </resources>
