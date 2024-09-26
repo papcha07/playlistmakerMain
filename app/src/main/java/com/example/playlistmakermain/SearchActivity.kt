@@ -2,6 +2,8 @@ package com.example.playlistmakermain
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +23,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var closeButton: ImageView
     private var editTextValue: String = ""
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
