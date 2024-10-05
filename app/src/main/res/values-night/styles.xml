@@ -74,4 +74,77 @@
     </style>
 
 
+    <style name = "trackViewTitleStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:gravity">center|center_horizontal</item>
+        <item name = "android:layout_marginTop">14dp</item>
+        <item name = "android:layout_marginLeft">66dp</item>
+        <item name = "android:layout_marginRight">44dp</item>
+        <item name = "android:fontFamily">font/ys_text_regular</item>
+        <item name = "android:textSize">@dimen/title_size_16px</item>
+        <item name = "android:backgroundTint">@color/white</item>
+        <item name = "android:textColor">@color/group_time_viewcolor</item>
+    </style>
+
+    <style name = "trackViewGroupNameStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:fontFamily">font/ys_text_regular</item>
+        <item name = "android:textSize">11sp</item>
+        <item name = "android:textColor">@color/group_time_viewcolor</item>
+    </style>
+
+
+    <style name="trackViewPointImageStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:src">@drawable/point</item>
+        <item name = "android:layout_gravity">center</item>
+        <item name = "android:colorBackground">@color/settingText</item>
+        <item name = "android:layout_margin">5dp</item>
+    </style>
+
+    <style name="trackViewTimeStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:fontFamily">font/ys_text_regular</item>
+        <item name = "android:textSize">11sp</item>
+        <item name = "android:textColor">@color/group_time_viewcolor</item>
+    </style>
+
+
+    <style name="trackViewArrowStyle">
+        <item name = "android:layout_width">8dp</item>
+        <item name = "android:layout_height">14dp</item>
+        <item name = "android:src">@drawable/track_arrow</item>
+        <item name = "android:layout_marginRight">20dp</item>
+        <item name = "android:layout_gravity">end</item>
+        <item name="android:layout_marginVertical">24dp</item>
+        <item name="tint">@color/settingText</item>
+    </style>
+
+    <style name="trackViewImageStyle">
+        <item name = "android:layout_width">45dp</item>
+        <item name = "android:layout_height">45dp</item>
+        <item name = "android:layout_marginTop">8dp</item>
+        <item name = "android:layout_marginBottom">8dp</item>
+        <item name = "android:layout_marginLeft">13dp</item>
+    </style>
+
+    <style name="trackViewCardStyle">
+        <item name = "android:layout_width">match_parent</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:orientation">horizontal</item>
+    </style>
+
+    <style name="recyclerViewSearchStyle">
+        <item name = "android:layout_width">match_parent</item>
+        <item name = "android:layout_height">match_parent</item>
+        <item name = "android:orientation">vertical</item>
+        <item name = "android:layout_marginTop">16dp</item>
+        <item name = "background">@color/backgroundSearch</item>
+    </style>
+
+
 </resources>

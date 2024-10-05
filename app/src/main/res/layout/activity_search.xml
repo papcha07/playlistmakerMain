@@ -62,7 +62,12 @@
             />
     </FrameLayout>
 
-
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/trackList"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    style="@style/recyclerViewSearchStyle"
+    >
+</androidx.recyclerview.widget.RecyclerView>
 
 
 
