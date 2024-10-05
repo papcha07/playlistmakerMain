@@ -32,17 +32,16 @@ class TrackViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     fun bind(track: Track){
 
-        if(track.trackName.length > 40) trackTitle.text = "${track.trackName.subSequence(0,30)}..."
+        if(track.trackName.length > 30) trackTitle.text = "${track.trackName.subSequence(0,25)}..."
         else trackTitle.text = track.trackName
 
         if(track.artistName.length > 20) trackGroup.text = "${track.artistName.subSequence(0,15)}..."
         else trackGroup.text = track.artistName
 
-        trackTime.text = track.trackTime
+        trackTime.text = track.trackTimeMillis
 
 
         if(isNetworkAvailable(itemView.context)){
-
             Glide.with(itemView).
             load(track.artworkUrl100).
             placeholder(R.drawable.placeholder).
@@ -50,7 +49,6 @@ class TrackViewHolder(view: View): RecyclerView.ViewHolder(view) {
             into(trackImage)
         }
         else {
-
             trackImage.setImageResource(R.drawable.placeholder)
         }
 

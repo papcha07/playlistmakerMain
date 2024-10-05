@@ -143,5 +143,42 @@
         <item name = "background">@color/backgroundSearch</item>
     </style>
 
+    <style name="frameLayoutErrorsStyle">
+        <item name = "android:layout_width">match_parent</item>
+        <item name = "android:layout_height">match_parent</item>
+        <item name = "android:layout_marginHorizontal">24dp</item>
+    </style>
+    
+    <style name="errorTypeSearchImageStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:layout_gravity">center_horizontal</item>
+        <item name = "android:layout_marginTop">102dp</item>
+    </style>
 
+    <style name="errorTypeSearchTextViewStyle">
+        <item name = "android:layout_width">wrap_content</item>
+        <item name = "android:layout_height">wrap_content</item>
+        <item name = "android:fontFamily">font/ys_text_medium</item>
+        <item name = "android:textSize">19sp</item>
+        <item name = "android:textColor">@color/black</item>
+        <item name = "android:layout_gravity">center_horizontal</item>
+        <item name = "android:textAlignment">center</item>
+        <item name = "android:layout_marginTop">238dp</item>
+    </style>
+    
+    <style name="refreshButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">350dp</item>
+        <item name="android:text">Обновить</item>
+        <item name="android:fontFamily">@font/ys_text_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name = "android:textColor">@color/white</item>
+        <item name="cornerRadius">54dp</item>
+        <item name="backgroundTint">@color/black</item>
+
+    </style>
 </resources>
