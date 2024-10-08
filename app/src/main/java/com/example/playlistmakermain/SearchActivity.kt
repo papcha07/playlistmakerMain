@@ -110,8 +110,9 @@ class SearchActivity : AppCompatActivity() {
         }
 
 
-        val lastQuery = editText.text.toString()
+
         refreshButtonId.setOnClickListener {
+            val lastQuery = editText.text.toString()
             performSearch(lastQuery)
         }
 
