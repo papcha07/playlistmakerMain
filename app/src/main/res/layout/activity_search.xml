@@ -3,39 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/backgroundSearch"
+    android:orientation="vertical"
 
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="center_vertical"
-        android:paddingTop="10dp"
-        android:focusable="true">
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/searchBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:clickable="true"
-            android:src="@drawable/right_arrow"
             android:layout_marginEnd="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/right_arrow"
             app:tint="@color/settingText">
 
         </ImageView>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_text_medium"
             android:text="Поиск"
             android:textColor="@color/settingText"
-            android:fontFamily="@font/ys_text_medium"
-            android:textSize="22dp"
-            >
+            android:textSize="22dp">
         </TextView>
     </LinearLayout>
 
@@ -51,28 +51,41 @@
         <EditText
             android:id="@+id/searchId"
             style="@style/SearchEditTextStyle"
-            />
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearButtonId"
             style="@style/CloseButtonEditText"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </FrameLayout>
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/trackList"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    style="@style/recyclerViewSearchStyle"
-    >
-</androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trackList"
+        android:visibility="visible"
+        style="@style/recyclerViewSearchStyle"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+    </androidx.recyclerview.widget.RecyclerView>
 
-
-
-
-
-
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/frameErrorId"
+        style="@style/frameLayoutErrorsStyle">
+        <ImageView
+            android:id="@+id/errorImageId"
+            style="@style/errorTypeSearchImageStyle">
+        </ImageView>
+        <TextView
+            android:id="@+id/errorTextMessageId"
+            style="@style/errorTypeSearchTextViewStyle">
+        </TextView>
+        <Button
+            android:id="@+id/refreshButtonId"
+            android:visibility="gone"
+            style="@style/refreshButtonStyle">
+        </Button>
+    </FrameLayout>
 
 </LinearLayout>
