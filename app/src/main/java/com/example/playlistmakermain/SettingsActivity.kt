@@ -12,6 +12,7 @@ import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -26,8 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.back)
 
         backButton.setOnClickListener{
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
 
 
@@ -59,10 +59,17 @@ class SettingsActivity : AppCompatActivity() {
 
         val themeSwitcher: SwitchMaterial = findViewById(R.id.themeSwitcher)
 
+
         themeSwitcher.isChecked = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
             .getBoolean(DARK_THEME_MODE, false)
 
+        if(themeSwitcher.isChecked){
+            themeSwitcher.trackTintList = ContextCompat.getColorStateList(this, R.color.back_switcher_color)
+            themeSwitcher.thumbTintList = ContextCompat.getColorStateList(this  , R.color.switcher_color)
+        }
+
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+
             (applicationContext as App).savedTheme(checked)
             (applicationContext as App).switchTheme(checked)
 

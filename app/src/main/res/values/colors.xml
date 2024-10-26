@@ -11,4 +11,7 @@
     <color name = "backgroundSearch">#FFFFFFFF</color>
     <color name="group_time_viewcolor">#AEAFB4</color>
     <color name="theme_color">#1A1B22</color>
+    <color name ="switcher_color">#3772E7</color>
+    <color name ="back_switcher_color">#9FBBF3</color>
+
 </resources>

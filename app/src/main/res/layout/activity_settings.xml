@@ -39,8 +39,9 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
-        android:text="@string/black_theme"
-        style="@style/SwitchStyle" />
+        style="@style/SwitchStyle"
+
+        android:text="@string/black_theme" />
 
     <LinearLayout
         android:id="@+id/shareButton"
