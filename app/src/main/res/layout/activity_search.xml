@@ -28,7 +28,6 @@
             app:tint="@color/settingText">
 
         </ImageView>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,10 +63,35 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
-        android:visibility="visible"
+        android:visibility="gone"
         style="@style/recyclerViewSearchStyle"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
     </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutHistoryId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvSearchId"
+            android:text="@string/you_search"
+            style="@style/historySearchTextViewStyle">
+        </TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecyclerViewId"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            style="@style/historyRecyclerViewStyle">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/clearHistoryButtonId"
+            android:text="@string/clear_history_button_text"
+            style="@style/clearHistoryButtonStyle">
+        </androidx.appcompat.widget.AppCompatButton>
+    </LinearLayout>
 
     <FrameLayout
         android:visibility="gone"
