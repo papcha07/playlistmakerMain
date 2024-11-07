@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/constraintBckgroundStyle"
+    >
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_begin="16dp"
+        android:orientation="vertical"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_end="16dp"
+        android:orientation="vertical"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
+    <ImageButton
+        android:id="@+id/backButtonMenu"
+        android:src="@drawable/arrow_to_left"
+        app:layout_constraintStart_toStartOf="@+id/start"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/theme_color"
+        style="@style/backButtonAudioStyle">
+    </ImageButton>
+
+    <ImageView
+        android:id="@+id/posterId"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@+id/start"
+        app:layout_constraintEnd_toStartOf="@+id/end"
+        app:layout_constraintTop_toBottomOf="@+id/backButtonMenu"
+        style="@style/posterStyle">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/trackNameId"
+        android:text="Yesterday (Remastered 2009)"
+        app:layout_constraintStart_toStartOf="@+id/start"
+        app:layout_constraintEnd_toStartOf="@+id/end"
+        app:layout_constraintTop_toBottomOf="@id/posterId"
+        app:layout_constraintHorizontal_bias="0"
+        style="@style/trackNameStyle">
+    </TextView>
+
+    <TextView
+        android:id="@+id/groupId"
+        android:text="The Beatles"
+        app:layout_constraintTop_toBottomOf="@id/trackNameId"
+        app:layout_constraintStart_toStartOf="@+id/start"
+        app:layout_constraintEnd_toStartOf="@+id/end"
+        app:layout_constraintHorizontal_bias="0"
+        style="@style/groupTextStyle">
+    </TextView>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierId"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="posterId,trackNameId,posterId,groupId"
+        android:orientation="vertical"
+        app:barrierDirection="bottom">
+    </androidx.constraintlayout.widget.Barrier>
+
+    <ImageButton
+        android:id="@+id/plusButtonId"
+        android:src="@drawable/plus"
+        app:layout_constraintStart_toStartOf="@id/start"
+        app:layout_constraintTop_toBottomOf="@id/barrierId"
+        app:layout_constraintEnd_toStartOf="@id/playButtonId"
+        style="@style/plusButtonStyle">
+    </ImageButton>
+
+    <ImageButton
+        android:id="@+id/playButtonId"
+        android:src="@drawable/play"
+        app:layout_constraintStart_toEndOf="@id/plusButtonId"
+        app:layout_constraintTop_toBottomOf="@id/barrierId"
+        app:layout_constraintEnd_toStartOf="@id/likeButtonId"
+        app:tint = "@color/theme_color"
+        style="@style/playButtonStyle">
+    </ImageButton>
+
+    <ImageButton
+        android:id="@+id/likeButtonId"
+        android:src="@drawable/like"
+        app:layout_constraintStart_toEndOf="@id/playButtonId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintTop_toBottomOf="@id/barrierId"
+        style="@style/likeButtonStyle">
+    </ImageButton>
+
+    <TextView
+        android:id="@+id/currentTrackTimeId"
+        android:text="0:30"
+        app:layout_constraintTop_toBottomOf="@id/playButtonId"
+        app:layout_constraintStart_toEndOf="@id/start"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        style="@style/currentTimeStyle">
+    </TextView>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2Id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="likeButtonId,playButtonId,playButtonId,currentTrackTimeId"
+        app:barrierDirection="bottom">
+    </androidx.constraintlayout.widget.Barrier>
+
+    <TextView
+        android:id="@+id/trackTimeId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintStart_toStartOf="@id/start"
+        android:text="Длительность"
+        android:layout_marginTop="30dp"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/albomId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/trackTimeId"
+        app:layout_constraintStart_toStartOf="@id/start"
+        android:text="Альбом"
+        android:layout_marginTop="18dp"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/yearId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/albomId"
+        app:layout_constraintStart_toStartOf="@id/start"
+        android:text="Год"
+        android:layout_marginTop="18dp"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/styleId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/yearId"
+        app:layout_constraintStart_toStartOf="@id/start"
+        android:text="Жанр"
+        android:layout_marginTop="18dp"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/countryId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/styleId"
+        app:layout_constraintStart_toStartOf="@id/start"
+        android:text="Страна"
+        android:layout_marginTop="18dp">
+    </TextView>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier3Id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="countryId,styleId,yearId,albomId,trackTimeId"
+        app:barrierDirection="end"
+        >
+    </androidx.constraintlayout.widget.Barrier>
+
+    <TextView
+        android:id="@+id/timeValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5:35"
+        app:layout_constraintBaseline_toBaselineOf="@id/trackTimeId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintStart_toEndOf="@id/barrier3Id"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintHorizontal_bias="1"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_regular"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/albomValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yesterday (Remastered 2009)"
+        app:layout_constraintBaseline_toBaselineOf="@id/albomId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintStart_toEndOf="@id/barrier3Id"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintHorizontal_bias="1"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_regular"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/yearValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1935"
+        app:layout_constraintBaseline_toBaselineOf="@id/yearId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintStart_toEndOf="@id/barrier3Id"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintHorizontal_bias="1"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_regular"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/styleValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Рок"
+        app:layout_constraintBaseline_toBaselineOf="@id/styleId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintStart_toEndOf="@id/barrier3Id"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintHorizontal_bias="1"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_regular"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/countryValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Великобритания"
+        app:layout_constraintBaseline_toBaselineOf="@id/countryId"
+        app:layout_constraintEnd_toStartOf="@id/end"
+        app:layout_constraintStart_toEndOf="@id/barrier3Id"
+        app:layout_constraintTop_toBottomOf="@id/barrier2Id"
+        app:layout_constraintHorizontal_bias="1"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_regular"
+        >
+    </TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

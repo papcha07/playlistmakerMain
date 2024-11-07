@@ -11,7 +11,7 @@
     <string name="subject_text">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="text_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="offer">https://yandex.ru/legal/practicum_offer/</string>
-    <string name = "not_found">Ничего не нашлось</string>
+    <string name="not_found">Ничего не нашлось</string>
     <string name="internet_problems">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="clear_history_button_text">Очистить историю</string>
     <string name="you_search">Вы искали</string>

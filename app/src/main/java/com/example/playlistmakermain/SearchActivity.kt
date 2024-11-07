@@ -296,7 +296,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
                         val time = toMinuteMillisec(it.trackTimeMillis)
                         val url = it.artworkUrl100
                         val trackId = it.trackId
-                        trackList.add(Track(trackId,trackName, artistName, time, url))
+                        val collectionName = it.collectionName
+                        val releaseDate = it.releaseDate
+                        val primaryGenreName = it.primaryGenreName
+                        val country = it.country
+                        trackList.add(Track(trackId,trackName, artistName, time, url,collectionName,releaseDate,primaryGenreName,country))
                         trackAdapter.notifyDataSetChanged()
                         Log.i("НАШЛИСЬ ТРЕКИ","${response.body()?.resultCount}")
                     }
@@ -319,7 +323,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     override fun onClick(track: Track) {
         searchHistory.addTrack(historyTrackList,track)
         historyTrackAdapter.notifyDataSetChanged()
-        Log.i("id","${track.trackId}}")
+
+        val gsonTrack = Gson().toJson(track)
+        val playerIntent = Intent(this,PlayerActivity::class.java)
+        playerIntent.putExtra("TRACK",gsonTrack)
+        startActivity(playerIntent)
     }
 
 
