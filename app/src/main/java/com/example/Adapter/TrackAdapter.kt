@@ -31,12 +31,10 @@ class TrackAdapter(val trackList: List<Track>, val trackListener: TrackListener)
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
 
         holder.bind(trackList[position])
+
         holder.itemView.setOnClickListener{
             trackListener.onClick(trackList[position])
-
         }
-
-
     }
 
     interface TrackListener{
