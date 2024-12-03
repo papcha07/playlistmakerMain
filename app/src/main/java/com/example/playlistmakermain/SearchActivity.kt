@@ -66,10 +66,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     }
 
 
-    private fun searchDebounce(query:String){
-        val searchRunnable = Runnable {
-            performSearch(query)
-        }
+    private val searchRunnable = Runnable {
+        performSearch(editText.text.toString())
+    }
+
+    private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
@@ -170,7 +171,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
                     historyRecyclerView.visibility = View.GONE
                     clearHistoryButton.visibility = View.GONE
                     youSearchId.visibility = View.GONE
-                    searchDebounce(s.toString())
+                    searchDebounce()
                 }
             }
 
@@ -206,7 +207,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
         refreshButton.setOnClickListener {
-            searchDebounce(editText.text.toString())
+            searchDebounce()
         }
 
         editText.setOnClickListener {
@@ -218,6 +219,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
             closeKeyboard(editText)
             clearTrackList(trackAdapter)
             closeButton.visibility = View.GONE
+
         }
 
 
