@@ -8,5 +8,6 @@
     <color name="rounded_background">#FFFFFF</color>
     <color name="group_time_viewcolor">#FFFFFF</color>
     <color name="theme_color">#FFFFFF</color>
+    <color name="pause_color">#FFFFFF</color>
 
 </resources>

@@ -34,11 +34,8 @@ class MainActivity : AppCompatActivity() {
         val mediaButtonClickListener: View.OnClickListener = object : View.OnClickListener{
 
             override fun onClick(v: View?) {
-
                 val mediaIntent = Intent(this@MainActivity, MediaActivity::class.java)
                 startActivity(mediaIntent)
-
-
             }
 
 

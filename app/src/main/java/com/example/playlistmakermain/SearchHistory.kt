@@ -9,16 +9,6 @@ const val HISTORY_TRACK = "history_tracks_key"
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
 
-
-    private fun isContains(historyTrackList: MutableList<Track>, track: Track ): Boolean{
-        historyTrackList.forEach{
-            if(it.trackId == track.trackId){
-                return true
-            }
-        }
-        return false
-    }
-
     fun addTrack(historyTrackList: MutableList<Track>, track: Track ){
         historyTrackList.removeAll{it.trackId == track.trackId}
         historyTrackList.add(0,track)
