@@ -1,10 +1,7 @@
-package com.example.playlistmakermain
+package com.example.presentation.playlistmakermain.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Configuration
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,37 +9,32 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Adapter
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.SimpleAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
-import com.example.Adapter.TrackAdapter
-import com.example.ItunesApi.ItunesApi
-import com.example.ItunesApi.ItunesResponse
+import com.example.Creator
+import com.example.data.network.ItunesApi
+import com.example.data.network.RetrofitNetworkClient
+import com.example.data.repository.HistoryRepositoryImpl
+import com.example.data.repository.TrackRepositoryImpl
+import com.example.domain.consumer.Consumer
+import com.example.domain.consumer.ConsumerData
+import com.example.domain.impl.HistoryInteractorImpl
+import com.example.domain.impl.TracksUseCase
+import com.example.domain.model.Track
+import com.example.playlistmakermain.R
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Queue
-import kotlin.math.log
 
 
 class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
@@ -105,36 +97,38 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
 
+
     //track adapter
     private val trackList: MutableList<Track> = mutableListOf()
     private var trackAdapter = TrackAdapter(trackList,this)
 
     //history adapter
-    private var historyTrackList: MutableList<Track> = mutableListOf()
-    private var historyTrackAdapter = TrackAdapter(historyTrackList,this)
+    private lateinit var history : MutableList<Track>
+    private lateinit var historyTrackAdapter: TrackAdapter
+    private lateinit var historyInteractor: HistoryInteractorImpl
 
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var tracksUseCase: TracksUseCase
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        sharedPreferences = getSharedPreferences(HISTORY_TRACKS_SHARED_PREF, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPreferences)
 
         progressBar = findViewById(R.id.progressBarId)
 
-        val savedHistoryJson = sharedPreferences.getString(HISTORY_TRACK,null)
-        if(savedHistoryJson != null){
-            historyTrackList = searchHistory.getHistoryTrackList(savedHistoryJson.toString())
-        }
 
+        historyInteractor = Creator.provideHistoryInteractor()
+        history = historyInteractor.getHistory()
+        Log.e("КОЛ-ВО ТРЕКОВ","${history.size}")
 
 
         //адаптер
         recyclerViewId = findViewById(R.id.trackList)
         trackAdapter = TrackAdapter(trackList,this)
-        historyTrackAdapter = TrackAdapter(historyTrackList,this)
+        historyTrackAdapter = TrackAdapter(historyInteractor.getHistory(),this)
         recyclerViewId.adapter = trackAdapter
 
         historyRecyclerView = findViewById(R.id.historyRecyclerViewId)
@@ -147,10 +141,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         errorInternetFrameLayout = findViewById(R.id.errorInternetId)
         refreshButton = findViewById(R.id.refreshButtonId)
 
-        historyTrackAdapter
         //элементы editText
         editText = findViewById(R.id.searchId)
         closeButton = findViewById(R.id.clearButtonId)
+
+        tracksUseCase = Creator.provideTracksUseCase()
 
 
 
@@ -158,7 +153,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (editText.hasFocus() && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && historyTrackList.isNotEmpty()) {
+                if (editText.hasFocus() && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && historyInteractor.getHistory().isNotEmpty()) {
                     recyclerViewId.visibility = View.GONE
                     errorInternetFrameLayout.visibility = View.GONE
                     notFoundFrameLayout.visibility = View.GONE
@@ -183,7 +178,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         }
 
         editText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && historyTrackList.isNotEmpty()) {
+            if (hasFocus && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && historyInteractor.getHistory().isNotEmpty()) {
                 recyclerViewId.visibility = View.GONE
                 errorInternetFrameLayout.visibility = View.GONE
                 notFoundFrameLayout.visibility = View.GONE
@@ -237,8 +232,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         clearHistoryButton.visibility = View.GONE
         youSearchId.visibility = View.GONE
         historyRecyclerView.visibility = View.GONE
-        historyTrackList.clear()
-        sharedPreferences.edit().remove(HISTORY_TRACK).apply()
+        historyInteractor.clearHistory()
         historyTrackAdapter.notifyDataSetChanged()
     }
 
@@ -278,80 +272,58 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
     private fun performSearch(query: String) {
-        val call = itunesServiceApi.search(query).apply {
-            request().newBuilder().header("Cache-Control", "no-cache").build()
-        }
 
-        if(editText.text.isNotEmpty()){
-            errorInternetFrameLayout.visibility = View.GONE
-            notFoundFrameLayout.visibility = View.GONE
-            historyRecyclerView.visibility = View.GONE
-            clearHistoryButton.visibility = View.GONE
-            recyclerViewId.visibility = View.GONE
-            youSearchId.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-            call.enqueue(object : Callback<ItunesResponse> {
-                override fun onResponse(call: Call<ItunesResponse>, response: Response<ItunesResponse>) {
-                    Log.d("ProgressBar", "Hiding progress bar after response")
-                    progressBar.visibility = View.GONE
-                    if (response.isSuccessful && response.body()?.resultCount != 0) {
-                        trackList.clear()
-                        val tracks = response.body()?.results
-                        tracks?.forEach {
-                            val trackName = it.trackName
-                            val artistName = it.artistName
-                            val time = toMinuteMillisec(it.trackTimeMillis)
-                            val url = it.artworkUrl100
-                            val trackId = it.trackId
-                            val collectionName = it.collectionName
-                            val releaseDate = it.releaseDate
-                            val primaryGenreName = it.primaryGenreName
-                            val country = it.country
-                            val preview = it.previewUrl
-                            trackList.add(Track(trackId,trackName, artistName, time, url,collectionName,releaseDate,primaryGenreName,country,preview))
-                            trackAdapter.notifyDataSetChanged()
+            if (query.isNotEmpty()) {
+                progressBar.visibility = View.VISIBLE
+                recyclerViewId.visibility = View.GONE
+                notFoundFrameLayout.visibility = View.GONE
+                errorInternetFrameLayout.visibility = View.GONE
+                youSearchId.visibility = View.GONE
+
+                tracksUseCase.execute(query, object : Consumer<MutableList<Track>> {
+                    override fun consume(data: ConsumerData<MutableList<Track>>) {
+                        handler.post {
+                            when (data) {
+                                is ConsumerData.Data -> {
+                                    trackList.clear()
+                                    trackList.addAll(data.value)
+                                    trackAdapter.notifyDataSetChanged()
+                                    progressBar.visibility = View.GONE
+                                    recyclerViewId.visibility = View.VISIBLE
+                                }
+                                is ConsumerData.Error -> {
+                                    progressBar.visibility = View.GONE
+                                    recyclerViewId.visibility = View.GONE
+                                    if (data.message == "no internet" || data.message == "api-error") {
+                                        Log.e("message",data.message)
+                                        errorInternetFrameLayout.visibility = View.VISIBLE
+                                    } else {
+                                        notFoundFrameLayout.visibility = View.VISIBLE
+                                    }
+                                }
+                            }
                         }
-                        notFoundFrameLayout.visibility = View.GONE
-                        recyclerViewId.visibility = View.VISIBLE
-                    }
-                    else if (response.isSuccessful && response.body()?.resultCount == 0) {
-                        recyclerViewId.visibility = View.GONE
-                        notFoundFrameLayout.visibility = View.VISIBLE
-                    }
-                    else if (response.code() != 200) {
-                        recyclerViewId.visibility = View.GONE
-                        errorInternetFrameLayout.visibility = View.VISIBLE
-                    }
 
-                }
-
-                override fun onFailure(call: Call<ItunesResponse>, t: Throwable) {
-                        progressBar.visibility = View.GONE
-                        errorInternetFrameLayout.visibility = View.VISIBLE
-                }
-            })
-        }
-        else{
-            recyclerViewId.visibility = View.GONE
-            errorInternetFrameLayout.visibility = View.GONE
-            notFoundFrameLayout.visibility = View.GONE
-        }
+                    }
+                })
+            } else {
+                clearTrackList(trackAdapter)
+            }
 
 
     }
 
-    override fun onClick(track: Track) {
-        searchHistory.addTrack(historyTrackList,track)
-        historyTrackAdapter.notifyDataSetChanged()
 
+    override fun onClick(track: Track) {
+        historyInteractor.addTrack(track)
+        historyTrackAdapter.updateData(historyInteractor.getHistory())
         if(clickDebounce()){
             val gsonTrack = Gson().toJson(track)
-            val playerIntent = Intent(this,PlayerActivity::class.java)
+            val playerIntent = Intent(this, PlayerActivity::class.java)
             playerIntent.putExtra("TRACK",gsonTrack)
             startActivity(playerIntent)
+
         }
-
-
     }
 
 
