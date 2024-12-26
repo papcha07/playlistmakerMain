@@ -1,19 +1,20 @@
 package com.example.domain.impl
 
+import com.example.domain.api.HistoryInteractorInterface
 import com.example.domain.model.Track
 import com.example.domain.repository.HistoryRepository
 
-class HistoryInteractorImpl(private val historyRepository: HistoryRepository)  {
+class HistoryInteractorImpl(private val historyRepository: HistoryRepository): HistoryInteractorInterface  {
 
-    fun addTrack(track: Track) {
+    override fun addTrack(track: Track) {
         historyRepository.addTrack(track)
     }
 
-    fun getHistory(): MutableList<Track> {
+    override fun getHistory(): MutableList<Track> {
         return historyRepository.getHistory()
     }
 
-    fun clearHistory() {
+    override fun clearHistory() {
         historyRepository.clearHistory()
     }
 

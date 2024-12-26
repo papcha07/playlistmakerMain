@@ -1,36 +1,37 @@
 package com.example.domain.impl
 
+import com.example.domain.api.MediaPlayerInteractorInterface
 import com.example.domain.repository.MediaPlayerRepository
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class MediaPlayerInteractorImpl(private val mediaPlayerRepository: MediaPlayerRepository, private val url: String) {
+class MediaPlayerInteractorImpl(private val mediaPlayerRepository: MediaPlayerRepository, private val url: String):
+    MediaPlayerInteractorInterface
+{
 
     init {
         mediaPlayerRepository.prepareTrack(url)
     }
 
-    fun play(){
+    override fun play(){
         mediaPlayerRepository.play()
     }
 
-    fun pause(){
+    override fun pause(){
         mediaPlayerRepository.pause()
     }
 
-    fun release(){
+    override fun release(){
         mediaPlayerRepository.release()
     }
 
-    fun getTrackTime(): String{
+    override fun getTrackTime(): String{
         return mediaPlayerRepository.getTrackTime()
     }
 
-    fun isPlaying(): Boolean{
+    override fun isPlaying(): Boolean{
         return mediaPlayerRepository.isPlaying()
     }
 
-    fun setOnCompletionListener(listener: () -> Unit) {
+    override fun setOnCompletionListener(listener: () -> Unit) {
         mediaPlayerRepository.setOnCompletionListener(listener)
     }
 

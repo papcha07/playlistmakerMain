@@ -2,20 +2,20 @@ package com.example.domain.impl
 
 import android.content.SharedPreferences
 import com.example.domain.repository.ThemeRepository
+import com.example.domain.api.ThemeInteractorInterface
 
-class ThemeInteractorImpl(var themeRepository: ThemeRepository) {
+class ThemeInteractorImpl(var themeRepository: ThemeRepository) : ThemeInteractorInterface {
 
-    fun getShared(): SharedPreferences{
+    override fun getShared(): SharedPreferences{
         return themeRepository.getSharedPref()
     }
 
-    fun savedTheme(darkTheme: Boolean){
+   override fun savedTheme(darkTheme: Boolean){
         themeRepository.savedTheme(darkTheme)
-    }
+   }
 
-    fun getCurrentTheme(): Boolean{
+    override fun getCurrentTheme(): Boolean{
         return themeRepository.getCurrentTheme()
     }
-
 
 }

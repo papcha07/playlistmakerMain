@@ -1,8 +1,8 @@
-package com.example.domain.repository
+package com.example.domain.api
 
 import com.example.domain.model.Track
 
-interface HistoryRepository {
+interface HistoryInteractorInterface {
     fun addTrack(track: Track)
     fun getHistory(): MutableList<Track>
     fun clearHistory()

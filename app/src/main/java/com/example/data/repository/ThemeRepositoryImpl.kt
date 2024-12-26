@@ -1,7 +1,6 @@
 package com.example.data.repository
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.domain.repository.ThemeRepository
 import com.example.presentation.playlistmakermain.PLAYLIST_MAKER_PREFERENCES

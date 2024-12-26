@@ -1,6 +1,5 @@
 package com.example.presentation.playlistmakermain.ui
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,14 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.Creator
-import com.example.data.repository.MediaPlayerRepositoryImpl
-import com.example.domain.impl.MediaPlayerInteractorImpl
-import com.example.domain.impl.TracksUseCase
+import com.example.domain.api.MediaPlayerInteractorInterface
 import com.example.domain.model.Track
 import com.example.playlistmakermain.R
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -27,7 +22,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var playButton: ImageButton
     private lateinit var timeTextView: TextView
-    private lateinit var playerUseCase: MediaPlayerInteractorImpl
+    private lateinit var playerUseCase: MediaPlayerInteractorInterface
     private var url = ""
 
 

@@ -1,12 +1,11 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.dto.ItunesResponse
-import com.example.data.network.NetworkClient
 import com.example.data.dto.TrackSearchRequest
+import com.example.data.network.NetworkClient
 import com.example.domain.model.Resource
-import com.example.domain.repository.TrackRepository
 import com.example.domain.model.Track
+import com.example.domain.repository.TrackRepository
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
 

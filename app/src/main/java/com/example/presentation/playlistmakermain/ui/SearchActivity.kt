@@ -20,13 +20,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Creator
 import com.example.data.network.ItunesApi
-import com.example.data.network.RetrofitNetworkClient
-import com.example.data.repository.HistoryRepositoryImpl
-import com.example.data.repository.TrackRepositoryImpl
+import com.example.domain.api.HistoryInteractorInterface
+import com.example.domain.api.TrackUseCaseInterface
 import com.example.domain.consumer.Consumer
 import com.example.domain.consumer.ConsumerData
-import com.example.domain.impl.HistoryInteractorImpl
-import com.example.domain.impl.TracksUseCase
 import com.example.domain.model.Track
 import com.example.playlistmakermain.R
 import com.google.gson.Gson
@@ -105,9 +102,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     //history adapter
     private lateinit var history : MutableList<Track>
     private lateinit var historyTrackAdapter: TrackAdapter
-    private lateinit var historyInteractor: HistoryInteractorImpl
+    private lateinit var historyInteractor: HistoryInteractorInterface
 
-    private lateinit var tracksUseCase: TracksUseCase
+    private lateinit var tracksUseCase: TrackUseCaseInterface
 
 
 

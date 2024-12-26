@@ -8,18 +8,15 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.Creator
-import com.example.data.repository.ThemeRepositoryImpl
-import com.example.domain.impl.ThemeInteractorImpl
 import com.example.presentation.playlistmakermain.App
-import com.example.presentation.playlistmakermain.DARK_THEME_MODE
-import com.example.presentation.playlistmakermain.PLAYLIST_MAKER_PREFERENCES
 import com.example.playlistmakermain.R
+import com.example.domain.api.ThemeInteractorInterface
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var themeInteractorImpl: ThemeInteractorImpl
+    private lateinit var themeInteractorImpl: ThemeInteractorInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
