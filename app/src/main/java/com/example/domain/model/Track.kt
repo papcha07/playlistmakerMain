@@ -1,4 +1,4 @@
-package com.example.playlistmakermain
+package com.example.domain.model
 
 class Track(val trackId: String,
             val trackName: String,

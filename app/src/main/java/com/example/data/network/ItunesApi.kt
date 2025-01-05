@@ -1,5 +1,6 @@
-package com.example.ItunesApi
+package com.example.data.network
 
+import com.example.data.dto.ItunesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

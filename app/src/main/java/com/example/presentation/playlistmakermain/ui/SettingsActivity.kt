@@ -1,28 +1,26 @@
-package com.example.playlistmakermain
+package com.example.presentation.playlistmakermain.ui
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Switch
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.Creator
+import com.example.presentation.playlistmakermain.App
+import com.example.playlistmakermain.R
+import com.example.domain.api.ThemeInteractorInterface
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var themeInteractorImpl: ThemeInteractorInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        themeInteractorImpl = Creator.provideThemeInteractor()
 
         val backButton = findViewById<ImageView>(R.id.back)
 
@@ -59,13 +57,15 @@ class SettingsActivity : AppCompatActivity() {
 
         val themeSwitcher: SwitchMaterial = findViewById(R.id.themeSwitcher)
 
-
-        themeSwitcher.isChecked = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-            .getBoolean(DARK_THEME_MODE, false)
+        themeSwitcher.isChecked = themeInteractorImpl.getCurrentTheme()
 
         if(themeSwitcher.isChecked){
-            themeSwitcher.trackTintList = ContextCompat.getColorStateList(this, R.color.back_switcher_color)
-            themeSwitcher.thumbTintList = ContextCompat.getColorStateList(this  , R.color.switcher_color)
+            themeSwitcher.trackTintList = ContextCompat.getColorStateList(this,
+                R.color.back_switcher_color
+            )
+            themeSwitcher.thumbTintList = ContextCompat.getColorStateList(this  ,
+                R.color.switcher_color
+            )
         }
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
