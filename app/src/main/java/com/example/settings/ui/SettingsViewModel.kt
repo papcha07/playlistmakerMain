@@ -12,7 +12,9 @@ class SettingsViewModel : ViewModel() {
     private val sharingInteractor = Creator.provideSharingInteractor()
 
     private val themeState = MutableLiveData<Boolean>()
-    fun getState(): LiveData<Boolean> = themeState
+    fun getState(): LiveData<Boolean>{
+        return themeState
+    }
 
     init {
         getState()

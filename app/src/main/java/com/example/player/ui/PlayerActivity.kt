@@ -30,10 +30,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private val handler: Handler = Handler(Looper.getMainLooper())
 
+    companion object{
+        const val DELAY = 500
+    }
+
     private val updateTrackTime = object : Runnable{
         override fun run() {
             playerViewModel.updateCurrentTime()
-            handler.postDelayed(this, 500)
+            handler.postDelayed(this, DELAY.toLong())
         }
     }
 

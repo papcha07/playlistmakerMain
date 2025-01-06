@@ -14,7 +14,9 @@
 
 
         private val currentTimeState = MutableLiveData<String>()
-        fun getCurrentTimeState(): LiveData<String> = currentTimeState
+        fun getCurrentTimeState(): LiveData<String>{
+            return currentTimeState
+        }
 
         init {
             completePlay()

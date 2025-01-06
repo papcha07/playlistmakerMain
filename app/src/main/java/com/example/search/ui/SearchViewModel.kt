@@ -11,7 +11,9 @@
     class SearchViewModel: ViewModel() {
         private val searchInteractor = Creator.provideTracksUseCase()
         private val state = MutableLiveData<SearchActivityState>()
-        fun getState() : LiveData<SearchActivityState> = state
+        fun getState() : LiveData<SearchActivityState>{
+            return state
+        }
 
 
         fun loadTrackList(query: String){
