@@ -6,9 +6,8 @@ import com.example.player.domain.repository.MediaPlayerRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaPlayerRepositoryImpl : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
-    private val mediaPlayer = MediaPlayer()
     private var onCompletionListener: (() -> Unit)? = null
 
 

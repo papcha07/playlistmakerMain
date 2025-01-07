@@ -13,6 +13,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -24,8 +26,8 @@ class PlayerActivity : AppCompatActivity() {
     private var url = ""
 
 
-    private val playerViewModel by lazy {
-        ViewModelProvider(this, factory = PlayerViewModel.factory(url))[PlayerViewModel::class.java]
+    private val playerViewModel : PlayerViewModel by viewModel{
+        parametersOf(url)
     }
 
     private val handler: Handler = Handler(Looper.getMainLooper())

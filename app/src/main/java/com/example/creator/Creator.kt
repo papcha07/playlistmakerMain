@@ -1,6 +1,8 @@
 package com.example.creator
 
 import android.app.Application
+import android.content.Context
+import com.example.PLAYLIST_MAKER_PREFERENCES
 import com.example.search.data.network.RetrofitNetworkClient
 import com.example.search.history.data.HistoryRepositoryImpl
 import com.example.player.data.MediaPlayerRepositoryImpl
@@ -23,61 +25,55 @@ import com.example.sharing.domain.api.SharingInteractorInterface
 import com.example.sharing.domain.interactor.SharingInteractorImpl
 import com.example.sharing.domain.repository.SharingRepositoryInterface
 
-object Creator {
-
-    private lateinit var application: Application
-
-    fun initApplication(application: Application){
-        Creator.application = application
-    }
-
-    //тема приложения
-    fun provideThemeInteractor() : ThemeInteractorInterface {
-        return ThemeInteractorImpl(provideThemeRepository())
-    }
-
-    fun provideThemeRepository(): ThemeRepository {
-        return ThemeRepositoryImpl(application)
-    }
-
-    //network
-    fun provideTracksUseCase() : TrackUseCaseInterface {
-        return TracksUseCase(provideTrackRepository())
-    }
-
-    fun provideTrackRepository(): TrackRepository {
-        return TrackRepositoryImpl(provideRetrofitNetworkClient())
-    }
-
-    fun provideRetrofitNetworkClient(): RetrofitNetworkClient {
-        return RetrofitNetworkClient()
-    }
-
-    //история
-    fun provideHistoryInteractor(): HistoryInteractorInterface {
-        return HistoryInteractorImpl(provideHistoryRepository())
-    }
-    fun provideHistoryRepository(): HistoryRepository {
-        return HistoryRepositoryImpl(application)
-    }
-
-    //player
-    fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractorInterface {
-        return MediaPlayerInteractorImpl(provideMediaPlayerRepository(),url)
-    }
-
-    fun provideMediaPlayerRepository(): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl()
-    }
-
-    //sharing
-    fun provideSharingInteractor() : SharingInteractorInterface{
-        return SharingInteractorImpl(provideSharingRepository())
-    }
-
-    fun provideSharingRepository(): SharingRepositoryInterface{
-        return SharingRepository(application)
-    }
-
-
-}
+//object Creator {
+//
+//    private lateinit var application: Application
+//
+//    fun initApplication(application: Application){
+//        Creator.application = application
+//    }
+//
+//    //тема приложения
+//    fun provideThemeInteractor() : ThemeInteractorInterface {
+//        return ThemeInteractorImpl(provideThemeRepository())
+//    }
+//
+//    fun provideThemeRepository(): ThemeRepository {
+//        return ThemeRepositoryImpl(application.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES,Context.MODE_PRIVATE))
+//    }
+//
+//    //network
+//    fun provideTracksUseCase() : TrackUseCaseInterface {
+//        return TracksUseCase(provideTrackRepository())
+//    }
+//
+//    fun provideTrackRepository(): TrackRepository {
+//        return TrackRepositoryImpl(provideRetrofitNetworkClient())
+//    }
+//
+//    fun provideRetrofitNetworkClient(): RetrofitNetworkClient {
+//        return RetrofitNetworkClient()
+//    }
+//
+//
+//
+//    //player
+//    fun provideMediaPlayerInteractor(url: String): MediaPlayerInteractorInterface {
+//        return MediaPlayerInteractorImpl(provideMediaPlayerRepository(),url)
+//    }
+//
+//    fun provideMediaPlayerRepository(): MediaPlayerRepository {
+//        return MediaPlayerRepositoryImpl()
+//    }
+//
+//    //sharing
+//    fun provideSharingInteractor() : SharingInteractorInterface{
+//        return SharingInteractorImpl(provideSharingRepository())
+//    }
+//
+//    fun provideSharingRepository(): SharingRepositoryInterface{
+//        return SharingRepository(application)
+//    }
+//
+//
+//}

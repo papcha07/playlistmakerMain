@@ -19,7 +19,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.creator.Creator
+import com.example.di.viewModelModule
 import com.example.search.history.domain.api.HistoryInteractorInterface
 import com.example.search.domain.model.Track
 import com.example.main.ui.MainActivity
@@ -28,6 +28,7 @@ import com.example.search.history.ui.HistoryViewModel
 import com.example.search.history.ui.TrackActivityState
 import com.example.player.ui.PlayerActivity
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
@@ -63,14 +64,10 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
     //history viewmodel
-    private val trackViewModel by lazy {
-        ViewModelProvider(this)[HistoryViewModel::class.java]
-    }
+    private val trackViewModel : HistoryViewModel by viewModel()
 
     //search viewmodel
-    private val searchViewModel by lazy {
-        ViewModelProvider(this)[SearchViewModel::class.java]
-    }
+    private val searchViewModel : SearchViewModel by viewModel()
 
 
 
@@ -100,7 +97,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
     //history adapter
     private lateinit var historyTrackAdapter: TrackAdapter
-    private lateinit var historyInteractor: HistoryInteractorInterface
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +129,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
         progressBar = findViewById(R.id.progressBarId)
-        historyInteractor = Creator.provideHistoryInteractor()
         //адаптер
         recyclerViewId = findViewById(R.id.trackList)
         trackAdapter = TrackAdapter(trackList,this)
@@ -177,7 +172,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && trackViewModel.getCurrentCountTrack() != 0) {
                 showHistory()
-                Log.e("история","${historyInteractor.getHistory().size}")
             }
             else{
                 hideHistory()

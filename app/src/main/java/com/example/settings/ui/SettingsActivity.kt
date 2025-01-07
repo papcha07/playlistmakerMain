@@ -7,25 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.App
-import com.example.creator.Creator
 import com.example.playlistmakermain.R
 import com.example.settings.domain.api.ThemeInteractorInterface
 import com.example.sharing.domain.model.ShareDataInfo
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var themeInteractorImpl: ThemeInteractorInterface
 
-    private val settingsViewModel by lazy {
-        ViewModelProvider(this)[SettingsViewModel::class.java]
-    }
+    private val settingsViewModel : SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        themeInteractorImpl = Creator.provideThemeInteractor()
 
         val backButton = findViewById<ImageView>(R.id.back)
 
