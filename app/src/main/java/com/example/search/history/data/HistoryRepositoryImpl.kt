@@ -7,33 +7,30 @@ import com.example.search.history.domain.repository.HistoryRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class HistoryRepositoryImpl(context: Context) : HistoryRepository {
-    private var historyKey = "SEARCH_HISTORY"
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(historyKey, Context.MODE_PRIVATE)
-    override fun addTrack(track: Track) {
+class HistoryRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) : HistoryRepository {
 
+    private val historyKey = "SEARCH_HISTORY"
+
+    override fun addTrack(track: Track) {
         val history = getHistory().toMutableList()
         history.removeAll { it.trackId == track.trackId }
         history.add(0, track)
         if (history.size > 10) {
             history.removeAt(10)
         }
-        val json = Gson().toJson(history)
-        sharedPreferences.edit().putString(historyKey,json).apply()
+        sharedPreferences.edit().putString(historyKey, gson.toJson(history)).apply()
     }
 
     override fun getHistory(): MutableList<Track> {
-        val json = sharedPreferences.getString(historyKey,null)
-        if(json == null) return mutableListOf()
-        else {
-
-            val type = object : TypeToken<MutableList<Track>>() {}.type
-            return Gson().fromJson(json,type)
-        }
+        val json = sharedPreferences.getString(historyKey, null)
+        return if (json == null) mutableListOf()
+        else gson.fromJson(json, object : TypeToken<MutableList<Track>>() {}.type)
     }
 
     override fun clearHistory() {
         sharedPreferences.edit().clear().apply()
     }
-
 }

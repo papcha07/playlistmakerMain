@@ -3,21 +3,29 @@
     import android.app.Application
     import android.content.res.Configuration
     import androidx.appcompat.app.AppCompatDelegate
-    import com.example.creator.Creator
+    import com.example.di.appModule
+    import com.example.di.dataModule
+    import com.example.di.domainModule
+    import com.example.di.viewModelModule
     import com.example.settings.domain.api.ThemeInteractorInterface
+    import org.koin.android.ext.android.inject
+    import org.koin.android.ext.koin.androidContext
+    import org.koin.core.context.startKoin
 
     const val DARK_THEME_MODE = "dark_theme_key"
     const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
 
     class App: Application(){
         var darkTheme: Boolean = false
-        private lateinit var themeInteractor : ThemeInteractorInterface
+        private val themeInteractor : ThemeInteractorInterface by inject()
 
         override fun onCreate() {
-            Creator.initApplication(this)
             super.onCreate()
-            themeInteractor = Creator.provideThemeInteractor()
 
+            startKoin{
+                androidContext(this@App)
+                modules(listOf(appModule,dataModule, domainModule, viewModelModule))
+            }
 
             val shared = themeInteractor.getShared()
 

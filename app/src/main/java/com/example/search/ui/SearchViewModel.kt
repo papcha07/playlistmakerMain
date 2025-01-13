@@ -3,13 +3,13 @@
     import androidx.lifecycle.LiveData
     import androidx.lifecycle.MutableLiveData
     import androidx.lifecycle.ViewModel
-    import com.example.creator.Creator
+    import com.example.search.domain.api.TrackUseCaseInterface
     import com.example.search.domain.consumer.Consumer
     import com.example.search.domain.consumer.ConsumerData
     import com.example.search.domain.model.Track
 
-    class SearchViewModel: ViewModel() {
-        private val searchInteractor = Creator.provideTracksUseCase()
+    class SearchViewModel(private val trackUseCaseInterface: TrackUseCaseInterface): ViewModel() {
+        private val searchInteractor = trackUseCaseInterface
         private val state = MutableLiveData<SearchActivityState>()
         fun getState() : LiveData<SearchActivityState>{
             return state

@@ -3,12 +3,13 @@ package com.example.search.history.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.creator.Creator
 import com.example.search.domain.model.Track
+import com.example.search.history.domain.api.HistoryInteractorInterface
+import com.example.search.history.domain.repository.HistoryRepository
 
-class HistoryViewModel : ViewModel() {
+class HistoryViewModel(private val historyInteractor: HistoryInteractorInterface) : ViewModel() {
 
-    private val historyInteractor = Creator.provideHistoryInteractor()
+
     private val state = MutableLiveData<TrackActivityState>()
     fun getState(): LiveData<TrackActivityState> = state
 

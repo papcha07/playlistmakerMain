@@ -5,13 +5,9 @@ import android.content.SharedPreferences
 import com.example.settings.domain.repository.ThemeRepository
 import com.example.PLAYLIST_MAKER_PREFERENCES
 
-const val PLAY_LIST_MAKER_THEME_PREFERENCES = "playlist_maker_theme_preferences"
 const val DARK_THEME_MODE = "dark_theme_key"
 
-class ThemeRepositoryImpl(context: Context) : ThemeRepository {
-
-    private val themeSharedPreferences: SharedPreferences = context.getSharedPreferences(
-        PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
+class ThemeRepositoryImpl(private val themeSharedPreferences: SharedPreferences) : ThemeRepository {
 
     override fun getSharedPref(): SharedPreferences {
         return themeSharedPreferences

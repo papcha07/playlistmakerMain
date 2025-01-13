@@ -258,6 +258,7 @@
     </style>
 
     <style name="plusButtonStyle">
+        <item name="android:src">@drawable/add_track_button</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
@@ -274,6 +275,7 @@
     </style>
 
     <style name="likeButtonStyle">
+        <item name="android:src">@drawable/like_track_button</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
