@@ -71,19 +71,8 @@ val dataModule = module {
         MediaPlayerRepositoryImpl(get())
     }
 
-    single{
+    factory{
         MediaPlayer()
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }

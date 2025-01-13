@@ -28,6 +28,7 @@ import com.example.search.history.ui.HistoryViewModel
 import com.example.search.history.ui.TrackActivityState
 import com.example.player.ui.PlayerActivity
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -69,7 +70,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     //search viewmodel
     private val searchViewModel : SearchViewModel by viewModel()
 
-
+    private val gson: Gson by inject()
 
 
     private lateinit var editText: EditText
@@ -106,7 +107,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         historyTrackAdapter = TrackAdapter(mutableListOf(),this)
 
         trackViewModel.getState().observe(this) {
-            state ->
+                state ->
             when (state) {
                 is TrackActivityState.Content -> {
                     if (state.data.isNotEmpty()) {
@@ -117,12 +118,16 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         }
 
         searchViewModel.getState().observe(this){
-            state ->
-            when(state){
-                is SearchActivityState.Loading -> showLoading()
-                is SearchActivityState.Content -> showContent(state.data)
-                is SearchActivityState.Error -> showError()
-                else -> showNotFound()
+                state ->
+
+            if(!editText.text.isNullOrEmpty()){
+                progressBar.visibility = View.GONE
+                when(state){
+                    is SearchActivityState.Loading -> showLoading()
+                    is SearchActivityState.Content -> showContent(state.data)
+                    is SearchActivityState.Error -> showError()
+                    else -> showNotFound()
+                }
             }
         }
 
@@ -151,14 +156,23 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                progressBar.visibility = View.GONE
                 if (editText.hasFocus() && (editText.text.isNullOrEmpty() || editText.text.toString() == "") && trackViewModel.getCurrentCountTrack() != 0) {
                     showHistory()
                 }
                 else {
-                    closeButton.visibility = View.VISIBLE
+                    notFoundFrameLayout.visibility = View.GONE
                     hideHistory()
                     searchDebounce()
                 }
+
+                if(s.isNullOrEmpty()){
+                    closeButton.visibility = View.GONE
+                }
+                else{
+                    closeButton.visibility = View.VISIBLE
+                }
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -199,7 +213,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
             closeKeyboard(editText)
             clearTrackList(trackAdapter)
             closeButton.visibility = View.GONE
-
         }
 
 
@@ -214,6 +227,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     }
 
     private fun showContent(data: MutableList<Track>) {
+        notFoundFrameLayout.visibility = View.GONE
+        errorInternetFrameLayout.visibility = View.GONE
         trackList.clear()
         trackList.addAll(data)
         trackAdapter.notifyDataSetChanged()
@@ -286,12 +301,14 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     }
 
     private fun showError(){
+        notFoundFrameLayout.visibility = View.GONE
         progressBar.visibility = View.GONE
         recyclerViewId.visibility = View.GONE
         errorInternetFrameLayout.visibility = View.VISIBLE
     }
 
     private fun showNotFound(){
+        errorInternetFrameLayout.visibility = View.GONE
         progressBar.visibility = View.GONE
         recyclerViewId.visibility = View.GONE
         notFoundFrameLayout.visibility = View.VISIBLE
@@ -301,7 +318,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         trackViewModel.addTrack(track)
 
         if(clickDebounce()){
-            val gsonTrack = Gson().toJson(track)
+            val gsonTrack = gson.toJson(track)
             val playerIntent = Intent(this, PlayerActivity::class.java)
             playerIntent.putExtra("TRACK",gsonTrack)
             startActivity(playerIntent)

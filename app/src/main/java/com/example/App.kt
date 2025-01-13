@@ -3,6 +3,7 @@
     import android.app.Application
     import android.content.res.Configuration
     import androidx.appcompat.app.AppCompatDelegate
+    import com.example.di.appModule
     import com.example.di.dataModule
     import com.example.di.domainModule
     import com.example.di.viewModelModule
@@ -23,7 +24,7 @@
 
             startKoin{
                 androidContext(this@App)
-                modules(listOf(dataModule, domainModule, viewModelModule))
+                modules(listOf(appModule,dataModule, domainModule, viewModelModule))
             }
 
             val shared = themeInteractor.getShared()

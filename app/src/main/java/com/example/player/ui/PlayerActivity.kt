@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,6 +26,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var timeTextView: TextView
     private var url = ""
 
+    private val gson: Gson by inject()
 
     private val playerViewModel : PlayerViewModel by viewModel{
         parametersOf(url)
@@ -90,7 +92,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
     private fun fillPlayer(){
-        val trackInfo = Gson().fromJson(intent.getStringExtra("TRACK"), Track::class.java)
+        val trackInfo = gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
         val posterId = findViewById<ImageView>(R.id.posterId)
         val trackNameId = findViewById<TextView>(R.id.trackNameId)
         val group = findViewById<TextView>(R.id.groupId)
@@ -102,7 +104,9 @@ class PlayerActivity : AppCompatActivity() {
 
 
         Glide.with(this).load(trackInfo.getCoverArtwork()).
-        placeholder(R.drawable.placeholder).centerCrop().transform(RoundedCorners(100)).into(posterId)
+        placeholder(R.drawable.placeholder).centerCrop().transform(
+            RoundedCorners(applicationContext.resources.getDimensionPixelSize(R.dimen.album_corner_radius))
+        ).into(posterId)
 
         url = trackInfo.previewUrl!!
         trackNameId.text = trackInfo.trackName

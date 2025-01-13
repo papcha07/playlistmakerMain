@@ -10,6 +10,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
+
     viewModel {
         HistoryViewModel(get())
     }
@@ -25,7 +26,7 @@ val viewModelModule = module {
     viewModel {
         (url: String) ->
         val interactor: MediaPlayerInteractorInterface = get{ parametersOf(url)}
-        PlayerViewModel(interactor, url)
+        PlayerViewModel(get{ parametersOf(url)}, url)
     }
 
 
