@@ -4,12 +4,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.creator.Creator
+import com.example.settings.domain.api.ThemeInteractorInterface
+import com.example.sharing.domain.api.SharingInteractorInterface
 import com.example.sharing.domain.model.ShareDataInfo
 
-class SettingsViewModel : ViewModel() {
-    private val themeInteractor = Creator.provideThemeInteractor()
-    private val sharingInteractor = Creator.provideSharingInteractor()
+class SettingsViewModel(
+    private val themeInteractor: ThemeInteractorInterface,
+    private val sharingInteractor: SharingInteractorInterface
+    ) : ViewModel() {
 
     private val themeState = MutableLiveData<Boolean>()
     fun getState(): LiveData<Boolean>{
