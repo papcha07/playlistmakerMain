@@ -11,36 +11,40 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
 
 
     override fun searchTrack(query: String): Resource<MutableList<Track>> {
-        val codeResponse = networkClient.doRequest(TrackSearchRequest(query))
-        when(codeResponse.resultCode){
-            200 ->{
-                val tracks = (codeResponse as ItunesResponse).results.map {
-                    Track(
-                    it.trackId,
-                    it.trackName,
-                    it.artistName,
-                    it.trackTimeMillis,
-                    it.artworkUrl100,
-                    it.collectionName,
-                    it.releaseDate,
-                    it.primaryGenreName,
-                    it.country,
-                    it.previewUrl)
-                }.toMutableList()
+        try {
+            val codeResponse = networkClient.doRequest(TrackSearchRequest(query))
+            when(codeResponse.resultCode){
+                200 ->{
+                    val tracks = (codeResponse as ItunesResponse).results.map {
+                        Track(
+                            it.trackId,
+                            it.trackName,
+                            it.artistName,
+                            it.trackTimeMillis,
+                            it.artworkUrl100,
+                            it.collectionName,
+                            it.releaseDate,
+                            it.primaryGenreName,
+                            it.country,
+                            it.previewUrl)
+                    }.toMutableList()
 
-                if(tracks.isNullOrEmpty()){
-                    return Resource.Failed("not found")
+                    if(tracks.isNullOrEmpty()){
+                        return Resource.Failed("not found")
+                    }
+                    else{
+                        return Resource.Success(tracks)
+                    }
                 }
-                else{
-                    return Resource.Success(tracks)
-                }
+                -1 -> return Resource.Failed("no internet")
+
+                else -> return Resource.Failed("api error")
+
             }
-            -1 -> return Resource.Failed("no internet")
-
-            else -> return Resource.Failed("api error")
-
         }
-
+        catch (ex: Exception){
+            return Resource.Failed("api error")
+        }
     }
 
 }

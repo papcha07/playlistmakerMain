@@ -21,15 +21,15 @@
             HistoryInteractorImpl(get())
         }
 
-        single<TrackUseCaseInterface>{
+        factory<TrackUseCaseInterface>{
             TracksUseCase(get())
         }
 
-        single<ThemeInteractorInterface>{
+        factory<ThemeInteractorInterface>{
             ThemeInteractorImpl(get())
         }
 
-        single<SharingInteractorInterface>{
+        factory<SharingInteractorInterface>{
             SharingInteractorImpl(get())
         }
 

@@ -1,5 +1,7 @@
 package com.example.di
 
+import com.example.media.FavoriteViewModel
+import com.example.media.PlaylistViewModel
 import com.example.player.domain.api.MediaPlayerInteractorInterface
 import com.example.player.ui.PlayerViewModel
 import com.example.search.history.ui.HistoryViewModel
@@ -27,6 +29,14 @@ val viewModelModule = module {
         (url: String) ->
         val interactor: MediaPlayerInteractorInterface = get{ parametersOf(url)}
         PlayerViewModel(get{ parametersOf(url)}, url)
+    }
+
+    viewModel {
+        FavoriteViewModel()
+    }
+
+    viewModel {
+        PlaylistViewModel()
     }
 
 
