@@ -5,6 +5,67 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.media.MediaActivity">
+    tools:context="com.example.media.MediaActivity"
+    android:background="@color/backgroundSearch"
+    >
 
+    <ImageView
+        android:id="@+id/mediaBckButtonId"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/arrow_to_left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:backgroundTint="@color/theme_color"
+        />
+
+    <TextView
+        android:id="@+id/mediaTitleId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/media"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@id/mediaBckButtonId"
+        app:layout_constraintTop_toTopOf="@id/mediaBckButtonId"
+        app:layout_constraintBottom_toBottomOf="@id/mediaBckButtonId"
+        android:layout_marginStart="28dp"
+        android:textColor="@color/theme_color"
+        android:fontFamily="@font/ys_text_medium"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrie1Id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="mediaBckButtonId,mediaTitleId"
+        android:orientation="horizontal"
+        app:barrierDirection="bottom"
+        >
+    </androidx.constraintlayout.widget.Barrier>
+
+    <com.google.android.material.tabs.TabLayout
+        android:background="@color/backgroundSearch"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/barrie1Id"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        app:tabTextAppearance="@style/TabTextAppearance"
+        app:tabIndicatorColor="@color/theme_color"
+        app:tabTextColor="@color/theme_color"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

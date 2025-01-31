@@ -15,5 +15,10 @@
     <string name="internet_problems">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="clear_history_button_text">Очистить историю</string>
     <string name="you_search">Вы искали</string>
+    <string name="media_empty">Ваша медиатека пуста</string>
+    <string name="playlist_empy">Вы не создали
+        ни одного плейлиста</string>
+    <string name="favotite_tracks">Избранные треки</string>
+    <string name="playlsit">Плейлисты</string>
 
 </resources>
