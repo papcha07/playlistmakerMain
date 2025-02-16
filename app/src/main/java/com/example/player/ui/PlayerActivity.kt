@@ -52,7 +52,13 @@ class PlayerActivity : AppCompatActivity() {
 
         timeTextView = findViewById(R.id.currentTrackTimeId)
         playButton = findViewById(R.id.playButtonId)
-        fillPlayer()
+        try {
+            fillPlayer()
+
+        }
+        catch (e: Exception){
+
+        }
 
         playButton.setOnClickListener {
             togglePlayback()
