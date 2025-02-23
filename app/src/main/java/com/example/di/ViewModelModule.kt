@@ -6,6 +6,7 @@ import com.example.player.domain.api.MediaPlayerInteractorInterface
 import com.example.player.ui.PlayerViewModel
 import com.example.search.history.ui.HistoryViewModel
 import com.example.search.ui.SearchViewModel
+import com.example.search.ui.SharedViewModel
 import com.example.settings.ui.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
@@ -37,6 +38,11 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistViewModel()
+    }
+
+
+    viewModel{
+        SharedViewModel()
     }
 
 

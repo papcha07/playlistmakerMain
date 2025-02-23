@@ -17,23 +17,12 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name="com.example.player.ui.PlayerActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.search.ui.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.media.MediaActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.settings.ui.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.main.ui.MainActivity"
-            android:exported="true">
+            android:name="com.example.main.ui.RootActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

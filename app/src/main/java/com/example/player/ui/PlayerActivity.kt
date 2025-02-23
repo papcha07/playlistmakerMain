@@ -6,12 +6,15 @@ import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
+import com.example.search.ui.SharedViewModel
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,8 +22,6 @@ import org.koin.core.parameter.parametersOf
 
 
 class PlayerActivity : AppCompatActivity() {
-
-
 
     private lateinit var playButton: ImageButton
     private lateinit var timeTextView: TextView
@@ -46,15 +47,17 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
 
         timeTextView = findViewById(R.id.currentTrackTimeId)
         playButton = findViewById(R.id.playButtonId)
+
         try {
             fillPlayer()
-
         }
         catch (e: Exception){
 
@@ -78,6 +81,14 @@ class PlayerActivity : AppCompatActivity() {
             timeTextView.setText(currentTime)
         }
         backToSearch()
+
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                playerViewModel.pause()
+                finish()
+            }
+        })
     }
     override fun onStop() {
         super.onStop()
@@ -91,12 +102,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
-    private fun backToSearch(){
+    private fun backToSearch() {
         val backButton = findViewById<ImageButton>(R.id.backButtonMenu)
-        backButton.setOnClickListener{
-            finish()
+        backButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
+
     private fun fillPlayer(){
         val trackInfo = gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
         val posterId = findViewById<ImageView>(R.id.posterId)
@@ -136,11 +148,6 @@ class PlayerActivity : AppCompatActivity() {
             handler.post(updateTrackTime)
         }
     }
-
-
-
-
-
 
 }
 
