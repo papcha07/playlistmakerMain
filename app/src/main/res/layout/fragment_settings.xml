@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     style="@style/SettingsBackground">
 
     <LinearLayout
@@ -29,7 +30,8 @@
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
         style="@style/SwitchStyle"
-
+        app:thumbTint="@color/switch_thumb_selector"
+        app:trackTint="@color/switch_track_selector"
         android:text="@string/black_theme" />
 
     <LinearLayout

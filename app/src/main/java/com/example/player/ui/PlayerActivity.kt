@@ -16,9 +16,11 @@ import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.example.search.ui.SharedViewModel
 import com.google.gson.Gson
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.java.KoinJavaComponent.get
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -29,9 +31,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private val gson: Gson by inject()
 
-    private val playerViewModel : PlayerViewModel by viewModel{
-        parametersOf(url)
-    }
+    private lateinit var playerViewModel: PlayerViewModel
+
 
     private val handler: Handler = Handler(Looper.getMainLooper())
 
@@ -56,12 +57,9 @@ class PlayerActivity : AppCompatActivity() {
         timeTextView = findViewById(R.id.currentTrackTimeId)
         playButton = findViewById(R.id.playButtonId)
 
-        try {
-            fillPlayer()
-        }
-        catch (e: Exception){
+        fillPlayer()
 
-        }
+        playerViewModel = get { parametersOf(url) }
 
         playButton.setOnClickListener {
             togglePlayback()

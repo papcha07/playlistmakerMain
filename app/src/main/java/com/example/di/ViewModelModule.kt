@@ -28,7 +28,6 @@ val viewModelModule = module {
 
     viewModel {
         (url: String) ->
-        val interactor: MediaPlayerInteractorInterface = get{ parametersOf(url)}
         PlayerViewModel(get{ parametersOf(url)}, url)
     }
 

@@ -322,7 +322,6 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
 
         if(clickDebounce()){
             val gsonTrack = gson.toJson(track)
-            findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
             val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
             playerIntent.putExtra("TRACK",gsonTrack)
             startActivity(playerIntent)
