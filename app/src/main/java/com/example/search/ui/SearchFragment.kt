@@ -7,8 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -16,22 +18,25 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.di.viewModelModule
-import com.example.search.history.domain.api.HistoryInteractorInterface
-import com.example.search.domain.model.Track
+import com.example.player.ui.PlayerActivity
 import com.example.playlistmakermain.R
+import com.example.playlistmakermain.databinding.FragmentSearchBinding
+import com.example.search.domain.model.Track
 import com.example.search.history.ui.HistoryViewModel
 import com.example.search.history.ui.TrackActivityState
-import com.example.player.ui.PlayerActivity
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
+class SearchFragment : Fragment(), TrackAdapter.TrackListener {
+
+
+    private lateinit var binding: FragmentSearchBinding
 
 
 
@@ -69,6 +74,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     //search viewmodel
     private val searchViewModel : SearchViewModel by viewModel()
 
+    //shared viewmodel
+
     private val gson: Gson by inject()
 
 
@@ -99,13 +106,20 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
     private lateinit var historyTrackAdapter: TrackAdapter
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         historyTrackAdapter = TrackAdapter(mutableListOf(),this)
 
-        trackViewModel.getState().observe(this) {
+        trackViewModel.getState().observe(viewLifecycleOwner) {
                 state ->
             when (state) {
                 is TrackActivityState.Content -> {
@@ -116,7 +130,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
             }
         }
 
-        searchViewModel.getState().observe(this){
+        searchViewModel.getState().observe(viewLifecycleOwner){
                 state ->
 
             if(!editText.text.isNullOrEmpty()){
@@ -132,23 +146,23 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
 
-        progressBar = findViewById(R.id.progressBarId)
+        progressBar = binding.progressBarId
         //адаптер
-        recyclerViewId = findViewById(R.id.trackList)
+        recyclerViewId = binding.trackList
         trackAdapter = TrackAdapter(trackList,this)
         recyclerViewId.adapter = trackAdapter
         //история
-        historyRecyclerView = findViewById(R.id.historyRecyclerViewId)
-        clearHistoryButton = findViewById(R.id.clearHistoryButtonId)
+        historyRecyclerView = binding.historyRecyclerViewId
+        clearHistoryButton = binding.clearHistoryButtonId
         historyRecyclerView.adapter = historyTrackAdapter
-        youSearchId = findViewById(R.id.youSearhId)
+        youSearchId = binding.youSearhId
         //заглушки
-        notFoundFrameLayout = findViewById(R.id.notFoundId)
-        errorInternetFrameLayout = findViewById(R.id.errorInternetId)
-        refreshButton = findViewById(R.id.refreshButtonId)
+        notFoundFrameLayout = binding.notFoundId
+        errorInternetFrameLayout = binding.errorInternetId
+        refreshButton = binding.refreshButtonId
         //элементы editText
-        editText = findViewById(R.id.searchId)
-        closeButton = findViewById(R.id.clearButtonId)
+        editText = binding.searchId
+        closeButton = binding.clearButtonId
 
 
         val textWatcher = object : TextWatcher {
@@ -216,10 +230,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
 
 
-
-
-
     }
+
 
     private fun showContent(data: MutableList<Track>) {
         notFoundFrameLayout.visibility = View.GONE
@@ -251,20 +263,16 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
         outState.putString("SEARCH_TEXT", editTextValue)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        editTextValue = savedInstanceState.getString("SEARCH_TEXT", "")
-        editText.setText(editTextValue)
-    }
+
 
     private fun showKeyboard(view: View) {
         view.requestFocus()
-        val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val keyboard = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         keyboard.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun closeKeyboard(view: View) {
-        val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val keyboard = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         keyboard.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
@@ -314,12 +322,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.TrackListener {
 
         if(clickDebounce()){
             val gsonTrack = gson.toJson(track)
-            val playerIntent = Intent(this, PlayerActivity::class.java)
+            val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
             playerIntent.putExtra("TRACK",gsonTrack)
             startActivity(playerIntent)
 
         }
     }
-
 
 }

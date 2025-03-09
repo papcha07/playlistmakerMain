@@ -304,7 +304,7 @@
     <style name="TabTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/ys_text_medium</item>
         <item name="android:textSize">14sp</item>
-        <item name="color">@color/theme_color</item>
     </style>
+
 
 </resources>
