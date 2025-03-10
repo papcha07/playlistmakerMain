@@ -1,11 +1,14 @@
 package com.example.player.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.player.domain.api.MediaPlayerInteractorInterface
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val playerInteractor: MediaPlayerInteractorInterface, url: String) :
     ViewModel() {
@@ -27,6 +30,7 @@ class PlayerViewModel(private val playerInteractor: MediaPlayerInteractorInterfa
         if (!playerInteractor.isPlaying()) {
             state.postValue(PlayerActivityState.Play)
             playerInteractor.play()
+            updateCurrentTime()
         }
     }
 
@@ -39,7 +43,13 @@ class PlayerViewModel(private val playerInteractor: MediaPlayerInteractorInterfa
     }
 
     fun updateCurrentTime() {
-        currentTimeState.postValue(playerInteractor.getTrackTime())
+        viewModelScope.launch {
+            playerInteractor.getTrackTime().collect{
+                time ->
+                currentTimeState.postValue(time)
+
+            }
+        }
     }
 
     fun release() {

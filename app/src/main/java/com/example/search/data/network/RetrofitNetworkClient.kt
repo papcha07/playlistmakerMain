@@ -1,17 +1,22 @@
 package com.example.search.data.network
 
+import android.util.Log
 import com.example.search.data.dto.Response
 import com.example.search.data.dto.TrackSearchRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 class RetrofitNetworkClient(private val networkService: RetrofitClient) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    suspend override fun doRequest(dto: Any): Response {
         return try {
             if(dto is TrackSearchRequest){
-                val response = networkService.api.search(dto.query).execute()
-                val networkResponse = response.body() ?: Response()
-                networkResponse.apply {
-                    resultCode = response.code()
+                withContext(Dispatchers.IO){
+                    val response = networkService.api.search(dto.query)
+                    response.apply {
+                        resultCode = 200
+                    }
                 }
             }
             else{
@@ -24,7 +29,6 @@ class RetrofitNetworkClient(private val networkService: RetrofitClient) : Networ
             Response().apply {
                 resultCode = -1
             }
-
         }
     }
 }
