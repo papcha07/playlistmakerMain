@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/constraintBckgroundStyle"
     >
-
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start"
         android:layout_width="0dp"
@@ -55,7 +58,7 @@
         >
     </TextView>
 
-    
+
     <TextView
         android:id="@+id/groupId"
         android:text="The Beatles"
@@ -255,3 +258,4 @@
     </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
