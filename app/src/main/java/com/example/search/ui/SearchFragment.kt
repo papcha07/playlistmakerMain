@@ -20,6 +20,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.player.ui.PlayerActivity
@@ -29,6 +30,9 @@ import com.example.search.domain.model.Track
 import com.example.search.history.ui.HistoryViewModel
 import com.example.search.history.ui.TrackActivityState
 import com.google.gson.Gson
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -46,12 +50,25 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
     }
     private var isClickAllowed = true
     private val handler: Handler = Handler(Looper.getMainLooper())
+    private var searchJob : Job? = null
+
+//    private fun clickDebounce() : Boolean{
+//        val current = isClickAllowed
+//        if(isClickAllowed){
+//            isClickAllowed = false
+//            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+//        }
+//        return current
+//    }
 
     private fun clickDebounce() : Boolean{
         val current = isClickAllowed
         if(isClickAllowed){
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
@@ -61,9 +78,17 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
         performSearch(editText.text.toString())
     }
 
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+//    private fun searchDebounce() {
+//        handler.removeCallbacks(searchRunnable)
+//        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+//    }
+
+    private fun searchDebounce(){
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            performSearch(editText.text.toString())
+        }
     }
 
 
@@ -325,7 +350,6 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
             val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
             playerIntent.putExtra("TRACK",gsonTrack)
             startActivity(playerIntent)
-
         }
     }
 

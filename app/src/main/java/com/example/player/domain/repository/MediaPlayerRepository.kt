@@ -1,5 +1,7 @@
 package com.example.player.domain.repository
 
+import kotlinx.coroutines.flow.Flow
+
 interface MediaPlayerRepository {
     fun prepareTrack(url: String)
     fun play()

@@ -3,6 +3,7 @@ package com.example.player.ui
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -33,23 +34,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var playerViewModel: PlayerViewModel
 
-
-    private val handler: Handler = Handler(Looper.getMainLooper())
-
-    companion object{
-        const val DELAY = 500
-    }
-
-    private val updateTrackTime = object : Runnable{
-        override fun run() {
-            playerViewModel.updateCurrentTime()
-            handler.postDelayed(this, DELAY.toLong())
-        }
-    }
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_player)
@@ -69,14 +53,14 @@ class PlayerActivity : AppCompatActivity() {
             when(state){
                 is PlayerActivityState.Complete ->{
                     playButton.setImageResource(R.drawable.play)
-                    timeTextView.setText("00:30")
+                    timeTextView.setText("00:00")
                 }
                 else -> {}
             }
         }
-        playerViewModel.getCurrentTimeState().observe(this){
-            currentTime ->
-            timeTextView.setText(currentTime)
+        playerViewModel.getCurrentTimeState().observe(this) { currentTime ->
+            timeTextView.text = currentTime
+
         }
         backToSearch()
 
@@ -95,7 +79,6 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(updateTrackTime)
         playerViewModel.release()
     }
 
@@ -138,12 +121,10 @@ class PlayerActivity : AppCompatActivity() {
         if(playerViewModel.getState().value == PlayerActivityState.Play){
             playerViewModel.pause()
             playButton.setImageResource(R.drawable.play)
-            handler.removeCallbacks(updateTrackTime)
         }
         else{
             playerViewModel.play()
             playButton.setImageResource(R.drawable.pause)
-            handler.post(updateTrackTime)
         }
     }
 
