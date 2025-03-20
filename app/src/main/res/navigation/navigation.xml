@@ -29,6 +29,6 @@
         />
     <fragment
         android:id="@+id/mediaFragment"
-        android:name="com.example.media.MediaFragment"
+        android:name="com.example.media.ui.MediaFragment"
         android:label="MediaFragment" />
 </navigation>

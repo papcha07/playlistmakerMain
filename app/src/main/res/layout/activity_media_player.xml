@@ -83,6 +83,7 @@
         app:layout_constraintStart_toStartOf="@id/start"
         app:layout_constraintTop_toBottomOf="@id/barrierId"
         app:layout_constraintEnd_toStartOf="@id/playButtonId"
+        android:clickable="true"
         style="@style/plusButtonStyle">
     </ImageButton>
 
@@ -96,13 +97,15 @@
         style="@style/playButtonStyle">
     </ImageButton>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/likeButtonId"
+        android:src="@drawable/isfav"
         app:layout_constraintStart_toEndOf="@id/playButtonId"
         app:layout_constraintEnd_toStartOf="@id/end"
         app:layout_constraintTop_toBottomOf="@id/barrierId"
+        android:clickable="true"
         style="@style/likeButtonStyle">
-    </ImageButton>
+    </ImageView>
 
     <TextView
         android:id="@+id/currentTrackTimeId"
