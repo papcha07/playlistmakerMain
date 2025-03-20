@@ -1,5 +1,7 @@
     package com.example.di
 
+    import com.example.media.domain.FavoriteInteractorImpl
+    import com.example.media.domain.api.FavoriteInteractor
     import com.example.player.domain.api.MediaPlayerInteractorInterface
     import com.example.player.domain.impl.MediaPlayerInteractorImpl
     import com.example.player.ui.PlayerViewModel
@@ -11,6 +13,7 @@
     import com.example.settings.domain.impl.ThemeInteractorImpl
     import com.example.sharing.domain.api.SharingInteractorInterface
     import com.example.sharing.domain.interactor.SharingInteractorImpl
+    import org.koin.core.instance.FactoryInstanceFactory
     import org.koin.core.parameter.parametersOf
     import org.koin.dsl.factory
     import org.koin.dsl.module
@@ -36,6 +39,10 @@
         factory<MediaPlayerInteractorInterface>{
             (url: String) ->
             MediaPlayerInteractorImpl(get(), url)
+        }
+
+        factory<FavoriteInteractor> {
+            FavoriteInteractorImpl(get())
         }
 
     }

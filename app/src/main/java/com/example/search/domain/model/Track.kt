@@ -1,6 +1,6 @@
 package com.example.search.domain.model
 
-class Track(val trackId: String,
+data class Track(val trackId: String,
             val trackName: String,
             val artistName: String,
             val trackTimeMillis: String,
@@ -9,7 +9,9 @@ class Track(val trackId: String,
             val releaseDate: String?,
             val primaryGenreName: String,
             val country: String,
-            val previewUrl: String?){
+            val previewUrl: String?,
+            var isFavorite: Boolean = false
+){
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
 }
 

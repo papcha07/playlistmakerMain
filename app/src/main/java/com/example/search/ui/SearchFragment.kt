@@ -49,17 +49,7 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
     private var isClickAllowed = true
-    private val handler: Handler = Handler(Looper.getMainLooper())
     private var searchJob : Job? = null
-
-//    private fun clickDebounce() : Boolean{
-//        val current = isClickAllowed
-//        if(isClickAllowed){
-//            isClickAllowed = false
-//            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
-//        }
-//        return current
-//    }
 
     private fun clickDebounce() : Boolean{
         val current = isClickAllowed
@@ -72,16 +62,6 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
         }
         return current
     }
-
-
-    private val searchRunnable = Runnable {
-        performSearch(editText.text.toString())
-    }
-
-//    private fun searchDebounce() {
-//        handler.removeCallbacks(searchRunnable)
-//        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-//    }
 
     private fun searchDebounce(){
         searchJob?.cancel()
@@ -149,7 +129,7 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
             when (state) {
                 is TrackActivityState.Content -> {
                     if (state.data.isNotEmpty()) {
-                        historyTrackAdapter.updateData(state.data)
+                        historyTrackAdapter.updateData(state.data.toMutableList())
                     }
                 }
             }
@@ -162,7 +142,7 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
                 progressBar.visibility = View.GONE
                 when(state){
                     is SearchActivityState.Loading -> showLoading()
-                    is SearchActivityState.Content -> showContent(state.data)
+                    is SearchActivityState.Content -> showContent(state.data.toMutableList())
                     is SearchActivityState.Error -> showError()
                     else -> showNotFound()
                 }
@@ -318,6 +298,7 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
 
     private fun performSearch(query: String){
         searchViewModel.loadTrackList(query)
+        searchViewModel.updateTracksFavotiteStatus()
     }
 
     private fun showLoading(){
@@ -344,7 +325,6 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
 
     override fun onClick(track: Track) {
         trackViewModel.addTrack(track)
-
         if(clickDebounce()){
             val gsonTrack = gson.toJson(track)
             val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
@@ -353,4 +333,9 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        searchViewModel.updateTracksFavotiteStatus()
+        trackViewModel.updateTracksFavotiteStatus()
+    }
 }

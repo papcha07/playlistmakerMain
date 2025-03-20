@@ -1,4 +1,4 @@
-package com.example.media
+package com.example.media.ui
 
 import androidx.lifecycle.ViewModel
 

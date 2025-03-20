@@ -21,5 +21,6 @@
     <color name = "selected_color">#3772E7</color>
     <color name = "bottom_line">#E6E8EB</color>
     <color name = "tumbler_back">#9FBBF3</color>
+    <color name = "fav_background">#1A1B22</color>
 
 </resources>

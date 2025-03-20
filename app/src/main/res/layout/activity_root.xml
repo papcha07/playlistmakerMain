@@ -34,7 +34,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu"
-        app:itemTextAppearanceActiveBoldEnabled="false"
         android:background="@color/bottom_nav_color"
         style="@style/bottom_nav_style" />
 </androidx.constraintlayout.widget.ConstraintLayout>

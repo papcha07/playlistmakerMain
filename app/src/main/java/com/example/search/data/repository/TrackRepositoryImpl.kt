@@ -33,7 +33,6 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                 }.toMutableList()
 
                 if (tracks.isNullOrEmpty()) {
-
                     emit(Resource.Failed("not found"))
                 } else {
                     emit(Resource.Success(tracks))

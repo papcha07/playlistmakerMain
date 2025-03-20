@@ -3,7 +3,12 @@ package com.example.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.example.PLAYLIST_MAKER_PREFERENCES
+import com.example.media.data.FavoriteRepositoryImpl
+import com.example.media.data.TrackDbConverter
+import com.example.media.db.TrackDataBase
+import com.example.media.domain.api.FavoriteRepository
 import com.example.player.data.MediaPlayerRepositoryImpl
 import com.example.player.domain.repository.MediaPlayerRepository
 import com.example.search.data.network.NetworkClient
@@ -73,6 +78,20 @@ val dataModule = module {
 
     factory{
         MediaPlayer()
+    }
+
+
+    //favorite
+    single<FavoriteRepository>{
+        FavoriteRepositoryImpl(get(), get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), TrackDataBase::class.java, "trackdatabase.db").build()
+    }
+
+    factory {
+        TrackDbConverter()
     }
 
 }

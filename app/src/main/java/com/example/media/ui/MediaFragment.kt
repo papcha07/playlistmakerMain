@@ -1,4 +1,4 @@
-package com.example.media
+package com.example.media.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

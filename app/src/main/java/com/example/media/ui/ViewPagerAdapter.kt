@@ -1,4 +1,4 @@
-package com.example.media
+package com.example.media.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

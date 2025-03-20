@@ -275,10 +275,8 @@
     </style>
 
     <style name="likeButtonStyle">
-        <item name="android:src">@drawable/like_track_button</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@null</item>
         <item name="android:layout_marginTop">54dp</item>
     </style>
 
