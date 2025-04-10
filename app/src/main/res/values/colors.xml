@@ -22,5 +22,7 @@
     <color name = "bottom_line">#E6E8EB</color>
     <color name = "tumbler_back">#9FBBF3</color>
     <color name = "fav_background">#1A1B22</color>
-
+    <color name="playlist_edit_text">#AEAFB4</color>
+    <color name ="create_playlist_back_color_in">#AEAFB4</color>
+    <color name="playlist_theme_color">@color/white</color>
 </resources>

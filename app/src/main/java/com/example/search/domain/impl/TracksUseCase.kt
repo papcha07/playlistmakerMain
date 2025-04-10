@@ -57,7 +57,6 @@ class TracksUseCase(private val trackRepository: TrackRepository) : TrackUseCase
             result ->
             when(result){
                 is Resource.Failed -> Pair(null, result.message)
-
                 is Resource.Success -> {
 
                     val tracks = result.data
