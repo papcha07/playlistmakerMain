@@ -10,11 +10,15 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.media.ui.FavoriteViewModel
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
+import com.example.playlistmakermain.databinding.ActivityMediaPlayerBinding
+import com.example.search.history.ui.TrackActivityState
 import com.example.search.ui.SharedViewModel
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
@@ -29,41 +33,45 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageButton
     private lateinit var timeTextView: TextView
     private var url = ""
-
     private val gson: Gson by inject()
-
+    private lateinit var binding: ActivityMediaPlayerBinding
+    private lateinit var track : Track
     private lateinit var playerViewModel: PlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media_player)
+        binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        track = getTrack()
 
         timeTextView = findViewById(R.id.currentTrackTimeId)
         playButton = findViewById(R.id.playButtonId)
-
-        fillPlayer()
-
-        playerViewModel = get { parametersOf(url) }
+        fillPlayer(track)
 
         playButton.setOnClickListener {
             togglePlayback()
         }
 
-        playerViewModel.getState().observe(this){ state->
-            when(state){
-                is PlayerActivityState.Complete ->{
-                    playButton.setImageResource(R.drawable.play)
-                    timeTextView.setText("00:00")
+        playerViewModel.getState().observe(this) { state ->
+            when (state) {
+                is PlayerActivityState.Complete -> {
+                    binding.playButtonId.setImageResource(R.drawable.play)
+                    binding.currentTrackTimeId.setText("00:00")
                 }
+
                 else -> {}
             }
         }
+
+
         playerViewModel.getCurrentTimeState().observe(this) { currentTime ->
-            timeTextView.text = currentTime
-
+            binding.currentTrackTimeId.setText(currentTime)
         }
-        backToSearch()
 
+
+        toggleLikeButton(track)
+
+        backToSearch()
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -71,62 +79,95 @@ class PlayerActivity : AppCompatActivity() {
                 finish()
             }
         })
+
     }
+
     override fun onStop() {
         super.onStop()
         playerViewModel.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        playerViewModel.release()
-    }
-
 
     private fun backToSearch() {
-        val backButton = findViewById<ImageButton>(R.id.backButtonMenu)
-        backButton.setOnClickListener {
+
+        binding.backButtonMenu.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    private fun fillPlayer(){
-        val trackInfo = gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
+    private fun fillPlayer(track: Track) {
+        val trackInfo = track
         val posterId = findViewById<ImageView>(R.id.posterId)
-        val trackNameId = findViewById<TextView>(R.id.trackNameId)
-        val group = findViewById<TextView>(R.id.groupId)
-        val albomValueId = findViewById<TextView>(R.id.albomValueId)
-        val yearValueId = findViewById<TextView>(R.id.yearValueId)
-        val styleValueId = findViewById<TextView>(R.id.styleValueId)
-        val countryValueId = findViewById<TextView>(R.id.countryValueId)
-        val timeValueId = findViewById<TextView>(R.id.timeValueId)
 
-
-        Glide.with(this).load(trackInfo.getCoverArtwork()).
-        placeholder(R.drawable.placeholder).centerCrop().transform(
-            RoundedCorners(applicationContext.resources.getDimensionPixelSize(R.dimen.album_corner_radius))
-        ).into(posterId)
+        Glide.with(this).load(trackInfo.getCoverArtwork()).placeholder(R.drawable.placeholder)
+            .centerCrop().transform(
+                RoundedCorners(applicationContext.resources.getDimensionPixelSize(R.dimen.album_corner_radius))
+            ).into(posterId)
 
         url = trackInfo.previewUrl!!
-        trackNameId.text = trackInfo.trackName
-        group.text = trackInfo.artistName
-        albomValueId.text = trackInfo.collectionName ?: ""
-        timeValueId.text = trackInfo.trackTimeMillis
-        yearValueId.text = trackInfo.releaseDate?.substring(0,4)
-        styleValueId.text = trackInfo.primaryGenreName
-        countryValueId.text = trackInfo.country
+        playerViewModel = get { parametersOf(url) }
+
+
+        binding.trackNameId.text = trackInfo.trackName
+        binding.groupId.text = trackInfo.artistName
+        binding.albomValueId.text = trackInfo.collectionName ?: ""
+        binding.timeValueId.text = trackInfo.trackTimeMillis
+        binding.yearValueId.text = trackInfo.releaseDate?.substring(0, 4)
+        binding.styleValueId.text = trackInfo.primaryGenreName
+        binding.countryValueId.text = trackInfo.country
+        playerViewModel.initStatus(trackInfo)
+        Log.d("TRACKSTATUS", "${trackInfo.isFavorite}")
+
+        playerViewModel.getTrackStatus().observe(this){
+            status ->
+            when(status){
+                is TrackFavoriteState.isFavorite -> {
+                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.isfav))
+                }
+                is TrackFavoriteState.isNotFavorite -> {
+                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.like))
+                }
+            }
+        }
     }
 
-    private fun togglePlayback(){
-        if(playerViewModel.getState().value == PlayerActivityState.Play){
+    private fun togglePlayback() {
+        if (playerViewModel.getState().value == PlayerActivityState.Play) {
             playerViewModel.pause()
-            playButton.setImageResource(R.drawable.play)
-        }
-        else{
+            binding.playButtonId.setImageResource(R.drawable.play)
+        } else {
             playerViewModel.play()
-            playButton.setImageResource(R.drawable.pause)
+            binding.playButtonId.setImageResource(R.drawable.pause)
         }
+    }
+
+    private fun toggleLikeButton(track: Track){
+        binding.likeButtonId.setOnClickListener {
+            when {
+                track.isFavorite -> {
+                    deleteTrack(track)
+                    track.isFavorite = false
+                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.like))
+                }
+                !track.isFavorite -> {
+                    addTrack(track)
+                    track.isFavorite = true
+                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.isfav))
+                }
+            }
+        }
+    }
+
+    private fun deleteTrack(track: Track){
+        playerViewModel.deleteTrackFromFavorite(track)
+    }
+
+    private fun addTrack(track: Track){
+        playerViewModel.addTrackToFavorite(track)
+    }
+
+    private fun getTrack() : Track{
+        return gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
     }
 
 }
-

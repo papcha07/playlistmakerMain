@@ -1,8 +1,7 @@
 package com.example.di
 
-import com.example.media.FavoriteViewModel
-import com.example.media.PlaylistViewModel
-import com.example.player.domain.api.MediaPlayerInteractorInterface
+import com.example.media.ui.FavoriteViewModel
+import com.example.media.ui.PlaylistViewModel
 import com.example.player.ui.PlayerViewModel
 import com.example.search.history.ui.HistoryViewModel
 import com.example.search.ui.SearchViewModel
@@ -15,11 +14,11 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel {
-        HistoryViewModel(get())
+        HistoryViewModel(get(), get())
     }
 
     viewModel {
-        SearchViewModel(get())
+        SearchViewModel(get(), get())
     }
 
     viewModel {
@@ -28,11 +27,11 @@ val viewModelModule = module {
 
     viewModel {
         (url: String) ->
-        PlayerViewModel(get{ parametersOf(url)}, url)
+        PlayerViewModel(get{ parametersOf(url)}, url, get())
     }
 
     viewModel {
-        FavoriteViewModel()
+        FavoriteViewModel(get())
     }
 
     viewModel {
