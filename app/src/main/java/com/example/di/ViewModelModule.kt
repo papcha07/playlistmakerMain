@@ -1,5 +1,6 @@
 package com.example.di
 
+import com.example.media.ui.CreatePlaylistViewModel
 import com.example.media.ui.FavoriteViewModel
 import com.example.media.ui.PlaylistViewModel
 import com.example.player.ui.PlayerViewModel
@@ -41,6 +42,10 @@ val viewModelModule = module {
 
     viewModel{
         SharedViewModel()
+    }
+
+    viewModel {
+        CreatePlaylistViewModel()
     }
 
 
