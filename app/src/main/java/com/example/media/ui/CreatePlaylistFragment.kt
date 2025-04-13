@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.FragmentCreatePlaylistBinding
 import com.google.android.material.textfield.TextInputEditText
@@ -39,6 +41,7 @@ class CreatePlaylistFragment : Fragment() {
         nameEditText = binding.playListNameId
         descriptionEditText = binding.descriptionId
         observeEditText()
+        setAlbumImage()
 
     }
 
@@ -73,6 +76,23 @@ class CreatePlaylistFragment : Fragment() {
         ).all {
             it.isNotEmpty()
         }
+    }
+
+    private fun setAlbumImage(){
+
+        val photoPicker = registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ){
+            uri ->
+            if(uri != null){
+                binding.imageId.setImageURI(uri)
+            }
+        }
+
+        binding.playListImageContainerId.setOnClickListener {
+            photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
     }
 
 

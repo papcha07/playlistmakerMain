@@ -321,4 +321,8 @@
         <item name="android:textColorHint">#1A1B22</item>
     </style>
 
+    <style name="RoundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item> <!-- Установите нужный вам радиус -->
+    </style>
 </resources>

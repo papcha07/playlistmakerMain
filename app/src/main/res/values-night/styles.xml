@@ -319,5 +319,9 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="RoundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 
 </resources>

@@ -10,7 +10,6 @@ class PlaylistDbConverter {
             playlist.name,
             playlist.description,
             playlist.path,
-            playlist.tracksList,
             playlist.trackCount
         )
     }
@@ -21,7 +20,6 @@ class PlaylistDbConverter {
             playlist.name,
             playlist.description,
             playlist.path,
-            playlist.tracksList,
             playlist.trackCount
         )
     }
