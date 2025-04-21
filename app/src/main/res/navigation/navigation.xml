@@ -37,11 +37,11 @@
     </fragment>
     <fragment
         android:id="@+id/createPlaylistFragment"
-        android:name="com.example.media.ui.CreatePlaylistFragment"
+        android:name="com.example.media.ui.playlist.CreatePlaylistFragment"
         android:label="fragment_create_playlist"
         tools:layout="@layout/fragment_create_playlist" />
     <fragment
         android:id="@+id/playlistFragment"
-        android:name="com.example.media.ui.PlaylistFragment"
+        android:name="com.example.media.ui.playlist.PlaylistFragment"
         android:label="PlaylistFragment" />
 </navigation>

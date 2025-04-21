@@ -1,7 +1,9 @@
     package com.example.di
 
     import com.example.media.domain.FavoriteInteractorImpl
+    import com.example.media.domain.PlayListInteractorImpl
     import com.example.media.domain.api.FavoriteInteractor
+    import com.example.media.domain.api.PlayListInteractor
     import com.example.player.domain.api.MediaPlayerInteractorInterface
     import com.example.player.domain.impl.MediaPlayerInteractorImpl
     import com.example.player.ui.PlayerViewModel
@@ -43,6 +45,10 @@
 
         factory<FavoriteInteractor> {
             FavoriteInteractorImpl(get())
+        }
+
+        factory<PlayListInteractor>{
+            PlayListInteractorImpl(get())
         }
 
     }

@@ -1,8 +1,8 @@
 package com.example.di
 
-import com.example.media.ui.CreatePlaylistViewModel
-import com.example.media.ui.FavoriteViewModel
-import com.example.media.ui.PlaylistViewModel
+import com.example.media.ui.playlist.CreatePlaylistViewModel
+import com.example.media.ui.favorite.FavoriteViewModel
+import com.example.media.ui.playlist.PlaylistViewModel
 import com.example.player.ui.PlayerViewModel
 import com.example.search.history.ui.HistoryViewModel
 import com.example.search.ui.SearchViewModel
@@ -45,7 +45,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        CreatePlaylistViewModel()
+        CreatePlaylistViewModel(get())
     }
 
 

@@ -6,4 +6,5 @@ interface PlayListRepository {
 
     suspend fun addPlayList(playlist: PlayList)
     fun getAllPlayLists() : Flow<List<PlayList>>
+
 }

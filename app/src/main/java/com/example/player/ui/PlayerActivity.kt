@@ -1,31 +1,22 @@
 package com.example.player.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.media.ui.FavoriteViewModel
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.ActivityMediaPlayerBinding
-import com.example.search.history.ui.TrackActivityState
-import com.example.search.ui.SharedViewModel
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.koin.java.KoinJavaComponent.get
 
 
 class PlayerActivity : AppCompatActivity() {
