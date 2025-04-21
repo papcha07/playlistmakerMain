@@ -56,6 +56,11 @@ class PlaylistFragment : Fragment(){
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        playlistViewModel.getAllPlayLists()
+    }
+
     private fun showEmptyMessage() {
         binding.recyclerViewId.visibility = View.GONE
         binding.iconId.visibility = View.VISIBLE

@@ -40,6 +40,6 @@ class PlayListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(playList: PlayList){
         imageView.setImageURI(playList.path.toUri())
         playListName.text = playList.name
-        countView.text = playList.trackCount.toString()
+        countView.text = "${playList.trackCount} треков"
     }
 }
