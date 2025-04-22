@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.media.ui.playlist.CreatePlaylistViewModel
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.ActivityMediaPlayerBinding
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
@@ -28,6 +30,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMediaPlayerBinding
     private lateinit var track : Track
     private lateinit var playerViewModel: PlayerViewModel
+    private val playListViewModel : CreatePlaylistViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,6 +162,13 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun getTrack() : Track{
         return gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
+    }
+
+
+    private fun addInPlaylist(){
+        binding.playListAddButtonId.setOnClickListener {
+
+        }
     }
 
 

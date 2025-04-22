@@ -16,6 +16,7 @@ import com.example.media.domain.api.PlayListRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
@@ -72,7 +73,7 @@ class PlayListRepositoryImpl(
 
 
     override suspend fun addPlayList(playlist: PlayList) {
-        with(Dispatchers.IO){
+        withContext(Dispatchers.IO){
             val convertertedPathToLocalStorage = saveImageToPrivateStorage(playlist.path)
             playlist.path = convertertedPathToLocalStorage
             val newPlaylist = playListDbConverter.map(playlist)
