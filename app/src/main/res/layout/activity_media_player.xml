@@ -324,7 +324,9 @@
         </androidx.appcompat.widget.AppCompatButton>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewId"
             android:layout_width="0dp"
+            android:visibility="visible"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"

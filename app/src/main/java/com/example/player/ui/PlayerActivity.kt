@@ -2,18 +2,26 @@ package com.example.player.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.media.domain.api.PlayList
 import com.example.media.ui.playlist.CreatePlaylistViewModel
+import com.example.media.ui.playlist.PlayListAdapter
+import com.example.media.ui.playlist.PlayListScreenState
 import com.example.search.domain.model.Track
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.ActivityMediaPlayerBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
@@ -30,12 +38,65 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMediaPlayerBinding
     private lateinit var track : Track
     private lateinit var playerViewModel: PlayerViewModel
-    private val playListViewModel : CreatePlaylistViewModel by viewModel()
+    private val playlistViewModel : CreatePlaylistViewModel by viewModel()
+    private lateinit var adapter: BottomAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bottomSheetContainer = binding.playlistsBottomSheet
+        val bottomBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        adapter = BottomAdapter(mutableListOf())
+        recyclerView = binding.recyclerViewId
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+
+        playlistViewModel.getAlbumState().observe(this) {
+                state ->
+            when(state) {
+                is PlayListScreenState.EmptyList -> {
+                    showEmptyMessage()
+                }
+
+                is PlayListScreenState.Content -> {
+                    showRecyclerView(state.data)
+                }
+            }
+        }
+
+        bottomBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when(newState){
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+        })
+
+        binding.playListAddButtonId.setOnClickListener {
+            bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+
         track = getTrack()
 
         timeTextView = findViewById(R.id.currentTrackTimeId)
@@ -75,6 +136,16 @@ class PlayerActivity : AppCompatActivity() {
         })
 
     }
+
+    private fun showEmptyMessage() {
+        binding.recyclerViewId.visibility = View.GONE
+    }
+
+    private fun showRecyclerView(data: List<PlayList>) {
+        adapter.setContent(data)
+        binding.recyclerViewId.visibility = View.VISIBLE
+    }
+
 
     override fun onStop() {
         super.onStop()
