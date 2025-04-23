@@ -341,11 +341,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
-    </androidx.fragment.app.FragmentContainerView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

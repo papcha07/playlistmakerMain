@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.media.ui.MediaFragmentDirections
 import com.example.player.ui.PlayerActivity
 import com.example.playlistmakermain.databinding.FragmentFavoriteBinding
 import com.example.search.domain.model.Track
+import com.example.search.ui.SearchFragmentDirections
 import com.example.search.ui.TrackAdapter
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
@@ -77,14 +80,14 @@ class FavoriteFragment : Fragment() , TrackAdapter.TrackListener {
     override fun onResume() {
         super.onResume()
         favoriteViewModel.showTrackList()
+        isClickAllowed = true
     }
 
     override fun onClick(track: Track) {
         if(clickDebounce()){
             val gsonTrack = gson.toJson(track)
-            val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-            playerIntent.putExtra("TRACK",gsonTrack)
-            startActivity(playerIntent)
+            val action = MediaFragmentDirections.actionMediaFragmentToPlayerFragment(gsonTrack)
+            findNavController().navigate(action)
         }
     }
 

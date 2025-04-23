@@ -2,14 +2,16 @@ package com.example.player.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,11 +19,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.media.domain.api.PlayList
 import com.example.media.ui.playlist.CreatePlaylistFragment
 import com.example.media.ui.playlist.CreatePlaylistViewModel
-import com.example.media.ui.playlist.PlayListAdapter
 import com.example.media.ui.playlist.PlayListScreenState
-import com.example.search.domain.model.Track
+import com.example.media.ui.playlist.PlaylistFragment
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.ActivityMediaPlayerBinding
+import com.example.playlistmakermain.databinding.FragmentPlayerBinding
+import com.example.search.domain.model.Track
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
@@ -30,23 +33,42 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
     private lateinit var playButton: ImageButton
     private lateinit var timeTextView: TextView
     private var url = ""
     private val gson: Gson by inject()
-    private lateinit var binding: ActivityMediaPlayerBinding
-    private lateinit var track : Track
+    private lateinit var binding: FragmentPlayerBinding
+    private lateinit var track: Track
     private lateinit var playerViewModel: PlayerViewModel
-    private val playlistViewModel : CreatePlaylistViewModel by viewModel()
+    private val playlistViewModel: CreatePlaylistViewModel by viewModel()
     private lateinit var adapter: BottomAdapter
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        val arg = PlayerFragmentArgs.fromBundle(requireArguments())
+        val stringTrack = arg.track
+        Log.d("stringTrack", stringTrack)
+        track = gson.fromJson(stringTrack, Track::class.java)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentPlayerBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playlistViewModel.getAllPlayLists()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val bottomSheetContainer = binding.playlistsBottomSheet
         val bottomBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
@@ -55,13 +77,12 @@ class PlayerActivity : AppCompatActivity() {
 
         adapter = BottomAdapter(mutableListOf())
         recyclerView = binding.recyclerViewId
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
 
-        playlistViewModel.getAlbumState().observe(this) {
-                state ->
-            when(state) {
+        playlistViewModel.getAlbumState().observe(viewLifecycleOwner) { state ->
+            when (state) {
                 is PlayListScreenState.EmptyList -> {
                     showEmptyMessage()
                 }
@@ -72,10 +93,10 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        bottomBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+        bottomBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
+                when (newState) {
 
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
@@ -97,18 +118,15 @@ class PlayerActivity : AppCompatActivity() {
             bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-
-        track = getTrack()
-
-        timeTextView = findViewById(R.id.currentTrackTimeId)
-        playButton = findViewById(R.id.playButtonId)
+        timeTextView = view.findViewById(R.id.currentTrackTimeId)
+        playButton = view.findViewById(R.id.playButtonId)
         fillPlayer(track)
 
         playButton.setOnClickListener {
             togglePlayback()
         }
 
-        playerViewModel.getState().observe(this) { state ->
+        playerViewModel.getState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlayerActivityState.Complete -> {
                     binding.playButtonId.setImageResource(R.drawable.play)
@@ -120,7 +138,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
 
-        playerViewModel.getCurrentTimeState().observe(this) { currentTime ->
+        playerViewModel.getCurrentTimeState().observe(viewLifecycleOwner) { currentTime ->
             binding.currentTrackTimeId.setText(currentTime)
         }
 
@@ -129,14 +147,18 @@ class PlayerActivity : AppCompatActivity() {
 
         backToSearch()
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                playerViewModel.pause()
-                finish()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    playerViewModel.pause()
+                    findNavController().popBackStack()
+                }
+            })
 
-        createPlayList()
+        binding.newPlayListButtonId.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
+        }
 
     }
 
@@ -157,20 +179,19 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private fun backToSearch() {
-
         binding.backButtonMenu.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            findNavController().popBackStack()
         }
     }
 
     private fun fillPlayer(track: Track) {
         val trackInfo = track
-        val posterId = findViewById<ImageView>(R.id.posterId)
+        val posterId = view?.findViewById<ImageView>(R.id.posterId)
 
         Glide.with(this).load(trackInfo.getCoverArtwork()).placeholder(R.drawable.placeholder)
             .centerCrop().transform(
-                RoundedCorners(applicationContext.resources.getDimensionPixelSize(R.dimen.album_corner_radius))
-            ).into(posterId)
+                RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.album_corner_radius))
+            ).into(posterId!!)
 
         url = trackInfo.previewUrl!!
         playerViewModel = get { parametersOf(url) }
@@ -186,19 +207,28 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.initStatus(trackInfo)
         Log.d("TRACKSTATUS", "${trackInfo.isFavorite}")
 
-        playerViewModel.getTrackStatus().observe(this){
-            status ->
-            when(status){
+        playerViewModel.getTrackStatus().observe(viewLifecycleOwner) { status ->
+            when (status) {
                 is TrackFavoriteState.isFavorite -> {
-                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.isfav))
+                    binding.likeButtonId.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.isfav
+                        )
+                    )
                 }
+
                 is TrackFavoriteState.isNotFavorite -> {
-                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.like))
+                    binding.likeButtonId.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.like
+                        )
+                    )
                 }
             }
         }
 
-        createPlayList()
     }
 
     private fun togglePlayback() {
@@ -211,45 +241,39 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleLikeButton(track: Track){
+    private fun toggleLikeButton(track: Track) {
         binding.likeButtonId.setOnClickListener {
             when {
                 track.isFavorite -> {
                     deleteTrack(track)
                     track.isFavorite = false
-                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.like))
+                    binding.likeButtonId.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.like
+                        )
+                    )
                 }
+
                 !track.isFavorite -> {
                     addTrack(track)
                     track.isFavorite = true
-                    binding.likeButtonId.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.isfav))
+                    binding.likeButtonId.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.isfav
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun deleteTrack(track: Track){
+    private fun deleteTrack(track: Track) {
         playerViewModel.deleteTrackFromFavorite(track)
     }
 
-    private fun addTrack(track: Track){
+    private fun addTrack(track: Track) {
         playerViewModel.addTrackToFavorite(track)
     }
-
-    private fun getTrack() : Track{
-        return gson.fromJson(intent.getStringExtra("TRACK"), Track::class.java)
-    }
-
-
-    private fun createPlayList(){
-        binding.newPlayListButtonId.setOnClickListener {
-            binding.fragmentContainer.visibility = View.VISIBLE
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, CreatePlaylistFragment())
-                .commit()
-        }
-    }
-
-
-
 }
