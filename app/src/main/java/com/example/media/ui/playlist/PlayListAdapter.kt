@@ -1,5 +1,6 @@
 package com.example.media.ui.playlist
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,15 @@ class PlayListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val countView : TextView = itemView.findViewById(R.id.playListCountId)
 
     fun bind(playList: PlayList){
-        imageView.setImageURI(playList.path.toUri())
+        val uri = playList.path
+        when{
+            uri == "" -> {
+                imageView.setImageResource(R.drawable.placeholder)
+            }
+            else -> {
+                imageView.setImageURI(playList.path?.toUri())
+            }
+        }
         playListName.text = playList.name
         countView.text = "${playList.trackCount} треков"
     }

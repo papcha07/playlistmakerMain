@@ -38,7 +38,16 @@ class BottomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val countView : TextView = itemView.findViewById(R.id.playlistCountId)
 
     fun bind(playList: PlayList){
-        imageView.setImageURI(playList.path.toUri())
+        val uri = playList.path
+        when{
+            uri == "" -> {
+                imageView.setImageResource(R.drawable.placeholder)
+            }
+            else -> {
+                imageView.setImageURI(playList.path?.toUri())
+            }
+        }
+
         playListName.text = playList.name
         countView.text = "${playList.trackCount} треков"
     }

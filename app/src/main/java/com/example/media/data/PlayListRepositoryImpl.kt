@@ -22,15 +22,17 @@ import java.io.FileOutputStream
 
 class PlayListRepositoryImpl(
     private val db: TrackDataBase,
-    private val playListDbConverter : PlaylistDbConverter,
-    private val context : Context
+    private val playListDbConverter: PlaylistDbConverter,
+    private val context: Context
 ) : PlayListRepository {
 
 
+    private fun saveImageToPrivateStorage(contentUri: String?): String? {
+        if (contentUri.isNullOrBlank()) return null
 
-    private fun saveImageToPrivateStorage(contentUri: String): String {
         return try {
             val uri = contentUri.toUri()
+
             val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum").apply {
                 if (!exists()) mkdirs()
             }
@@ -47,23 +49,25 @@ class PlayListRepositoryImpl(
             outputFile.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
-            throw e
+            null
         }
     }
 
-    private fun fromLocaleStorageToUri(localPath: String): String {
+
+    private fun fromLocaleStorageToUri(localPath: String?): String? {
         return try {
             val file = File(localPath)
-            if (!file.exists()) return ""
-
-            val bitmap = BitmapFactory.decodeFile(localPath)
-
-            val tempFile = File.createTempFile("temp_img_", ".jpg", context.cacheDir)
-            FileOutputStream(tempFile).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            if (!file.exists()) {
+                return null
+            } else {
+                val bitmap = BitmapFactory.decodeFile(localPath)
+                val tempFile = File.createTempFile("temp_img_", ".jpg", context.cacheDir)
+                FileOutputStream(tempFile).use { out ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                }
+                Uri.fromFile(tempFile).toString()
             }
 
-            Uri.fromFile(tempFile).toString()
         } catch (e: Exception) {
             e.printStackTrace()
             ""
@@ -73,7 +77,7 @@ class PlayListRepositoryImpl(
 
 
     override suspend fun addPlayList(playlist: PlayList) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             val convertertedPathToLocalStorage = saveImageToPrivateStorage(playlist.path)
             playlist.path = convertertedPathToLocalStorage
             val newPlaylist = playListDbConverter.map(playlist)
@@ -81,18 +85,17 @@ class PlayListRepositoryImpl(
         }
     }
 
-    override fun getAllPlayLists(): Flow<List<PlayList>> = flow{
+    override fun getAllPlayLists(): Flow<List<PlayList>> = flow {
         val entityList = db.playListDao().getAllPlayLists()
         val convertedList = convertToPlayList(entityList)
         emit(convertedList)
     }
 
-    private fun convertToPlayList(list: List<PlaylistEntity>) : List<PlayList>{
-        return list.map {
-            track ->
-            val tempPath = fromLocaleStorageToUri(track.path)
-            track.path = tempPath
-            playListDbConverter.map(track)
+    private fun convertToPlayList(list: List<PlaylistEntity>): List<PlayList> {
+        return list.map { playlist ->
+            val tempPath = fromLocaleStorageToUri(playlist.path)
+            playlist.path = tempPath
+            playListDbConverter.map(playlist)
         }
     }
 }

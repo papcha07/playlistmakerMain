@@ -10,7 +10,7 @@ data class PlaylistEntity(
     val id : Int,
     val name: String,
     val description : String,
-    var path: String,
+    var path: String? = null,
     val trackList : String,
     val trackCount : Int
 )
