@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.room.util.foreignKeyCheck
@@ -89,6 +90,19 @@ class PlayListRepositoryImpl(
         val entityList = db.playListDao().getAllPlayLists()
         val convertedList = convertToPlayList(entityList)
         emit(convertedList)
+    }
+
+    override fun getCurrentPlayList(id: Int): Flow<PlayList> {
+        return flow{
+            val playListById = db.playListDao().getPlayListById(id)
+            val convertedList = playListDbConverter.map(playListById)
+            Log.d("playListById", convertedList.id.toString())
+            emit(convertedList)
+        }
+    }
+
+    override suspend fun updatePlayList(playlist: PlayList) {
+        db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
 
     private fun convertToPlayList(list: List<PlaylistEntity>): List<PlayList> {

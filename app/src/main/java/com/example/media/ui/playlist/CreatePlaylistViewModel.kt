@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.media.domain.api.PlayList
 import com.example.media.domain.api.PlayListInteractor
+import com.example.search.domain.model.Track
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,10 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
     fun getAlbumState(): LiveData<PlayListScreenState> {
         return albumsState
     }
+
+
+    private val addedState = MutableLiveData<Boolean?>()
+     fun getAddedState () : LiveData<Boolean?> = addedState
 
     init {
         backState.value = true
@@ -52,5 +57,17 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
         }
     }
 
+
+    fun addTrackInPlayList(track: Track, playList: PlayList){
+        viewModelScope.launch {
+            val added = playListInteractor.addTrackInPlayList(track, playList)
+            addedState.postValue(added)
+            getAllPlayLists()
+        }
+    }
+
+    fun clearAddedState() {
+        addedState.postValue(null)
+    }
 
 }

@@ -53,7 +53,7 @@ class PlayerActivity : AppCompatActivity() {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        adapter = BottomAdapter(mutableListOf())
+//        adapter = BottomAdapter(mutableListOf())
         recyclerView = binding.recyclerViewId
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter

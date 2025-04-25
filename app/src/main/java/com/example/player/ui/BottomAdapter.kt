@@ -11,7 +11,10 @@ import com.example.media.ui.playlist.PlayListViewHolder
 import com.example.playlistmakermain.R
 import com.google.android.material.imageview.ShapeableImageView
 
-class BottomAdapter(private val albumList: MutableList<PlayList>) : RecyclerView.Adapter<BottomViewHolder>() {
+class BottomAdapter(
+    private val albumList: MutableList<PlayList>,
+    private val onItemClick: (PlayList) -> Unit
+    ) : RecyclerView.Adapter<BottomViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.player_playlist_item, parent, false)
         return BottomViewHolder(view)
@@ -23,6 +26,10 @@ class BottomAdapter(private val albumList: MutableList<PlayList>) : RecyclerView
 
     override fun onBindViewHolder(holder: BottomViewHolder, position: Int) {
         holder.bind(albumList[position])
+        val item = albumList[position]
+        holder.itemView.setOnClickListener {
+            onItemClick(item)
+        }
     }
 
     fun setContent(list: List<PlayList>) {

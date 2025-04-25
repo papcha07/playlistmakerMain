@@ -14,8 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.example.media.domain.api.PlayList
 import com.example.playlistmakermain.databinding.FragmentCreatePlaylistBinding
+import com.example.search.domain.model.Track
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -154,7 +156,7 @@ class CreatePlaylistFragment : Fragment() {
                     name = binding.playListNameId.text.toString(),
                     description = binding.descriptionId.text.toString(),
                     path = uriCheck.toString(),
-                    trackList = "",
+                    trackList = Gson().toJson(mutableListOf<Track>()),
                     trackCount = 0
                 )
             )

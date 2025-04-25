@@ -5,6 +5,6 @@ data class PlayList(
     val name: String,
     val description : String,
     var path: String? = null,
-    val trackList : String,
-    val trackCount : Int
+    var trackList : String,
+    var trackCount : Int
 )

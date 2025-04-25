@@ -30,12 +30,18 @@ class RootActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
         changeBottomColorState()
 
+        //asdas
+        //asdasd
+
 
         navController.addOnDestinationChangedListener{
             _, destination, _ ->
             when(destination.id){
                 R.id.createPlaylistFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
                 }
             }
         }

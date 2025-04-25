@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -45,6 +46,7 @@ class PlayerFragment : Fragment() {
     private val playlistViewModel: CreatePlaylistViewModel by viewModel()
     private lateinit var adapter: BottomAdapter
     private lateinit var recyclerView: RecyclerView
+    private var playListName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,11 @@ class PlayerFragment : Fragment() {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        adapter = BottomAdapter(mutableListOf())
+        adapter = BottomAdapter(mutableListOf()) { playList ->
+            playListName = playList.name
+            addTrackInPlayList(track, playList)
+        }
+
         recyclerView = binding.recyclerViewId
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
@@ -90,6 +96,25 @@ class PlayerFragment : Fragment() {
                 is PlayListScreenState.Content -> {
                     showRecyclerView(state.data)
                 }
+            }
+        }
+
+        playlistViewModel.getAddedState().observe(viewLifecycleOwner) { state ->
+
+            when (state) {
+                true -> {
+                    showAddMessage()
+                    bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    playlistViewModel.clearAddedState()
+
+                }
+
+                false -> {
+                    showAlreadyAddMessage()
+                    playlistViewModel.clearAddedState()
+                }
+
+                null -> {}
             }
         }
 
@@ -184,6 +209,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
+
     private fun fillPlayer(track: Track) {
         val trackInfo = track
         val posterId = view?.findViewById<ImageView>(R.id.posterId)
@@ -275,5 +301,25 @@ class PlayerFragment : Fragment() {
 
     private fun addTrack(track: Track) {
         playerViewModel.addTrackToFavorite(track)
+    }
+
+    private fun addTrackInPlayList(track: Track, playList: PlayList) {
+        playlistViewModel.addTrackInPlayList(track, playList)
+    }
+
+    private fun showAlreadyAddMessage() {
+        Toast.makeText(
+            requireContext(),
+            "Трек уже добавлен в плейлист ${playListName}",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun showAddMessage() {
+        Toast.makeText(
+            requireContext(),
+            "Добавлено в плейлист ${playListName}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
