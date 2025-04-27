@@ -117,6 +117,7 @@ class PlayListRepositoryImpl(
     }
 
     override suspend fun updatePlayList(playlist: PlayList) {
+        Log.d("playlistChanged", playlist.trackList)
         db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
 

@@ -1,5 +1,6 @@
 package com.example.media.domain
 
+import android.util.Log
 import com.example.media.domain.api.PlayList
 import com.example.media.domain.api.PlayListInteractor
 import com.example.media.domain.api.PlayListRepository
@@ -52,8 +53,12 @@ class PlayListInteractorImpl(
         val curPlayList = playList
         val type = object : TypeToken<List<Track>>() {}.type
         val trackList: MutableList<Track> = Gson().fromJson(playList.trackList, type) ?: mutableListOf()
-        trackList.remove(track)
+        val index = trackList.indexOfFirst { it.trackId == track.trackId }
+        if (index != -1) {
+            trackList.removeAt(index)
+        }
         val gsonlist = Gson().toJson(trackList)
+        Log.d("gsonList", gsonlist)
         curPlayList.trackList = gsonlist
         curPlayList.trackCount = trackList.size
         playListRepository.updatePlayList(curPlayList)
