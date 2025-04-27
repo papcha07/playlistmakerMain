@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.media.domain.api.FavoriteInteractor
 import com.example.media.domain.api.PlayList
 import com.example.media.domain.api.PlayListInteractor
 import com.example.search.domain.model.Track
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor) : ViewModel() {
+class CreatePlaylistViewModel(
+    private val playListInteractor: PlayListInteractor,
+    private val trackInteractor: FavoriteInteractor
+) : ViewModel() {
 
     private val backState = MutableLiveData<Boolean>()
     fun getBackState(): LiveData<Boolean> {
@@ -65,7 +69,8 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
     fun getTracksByPlayListId(id: Int) {
         viewModelScope.launch {
             val list = playListInteractor.getTracksById(id).first()
-            trackState.postValue(list)
+            val newList = trackInteractor.updateTrackStatus(list)
+            trackState.postValue(newList)
         }
     }
 

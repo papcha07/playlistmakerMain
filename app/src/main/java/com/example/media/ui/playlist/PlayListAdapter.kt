@@ -44,18 +44,28 @@ class PlayListAdapter (
 class PlayListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ShapeableImageView = itemView.findViewById(R.id.playlistImageId)
     private val playListName: TextView = itemView.findViewById(R.id.playListNameId)
-    private val countView : TextView = itemView.findViewById(R.id.playListCountId)
+    private val countView: TextView = itemView.findViewById(R.id.playListCountId)
 
-    fun bind(playList: PlayList){
-        val uri = playList.path
-        when{
-            uri == "" -> {
-                imageView.setImageResource(R.drawable.placeholder)
+    fun bind(playList: PlayList) {
+        try {
+            when {
+                playList.path.isNullOrEmpty() -> {
+                    imageView.setImageResource(R.drawable.placeholder)
+                }
+                else -> {
+                    val uri = playList.path!!.toUri()
+                    imageView.setImageURI(uri)
+                    // Добавляем fallback на случай ошибки загрузки
+                    if (imageView.drawable == null) {
+                        imageView.setImageResource(R.drawable.placeholder)
+                    }
+                }
             }
-            else -> {
-                imageView.setImageURI(playList.path?.toUri())
-            }
+        } catch (e: Exception) {
+            Log.e("PlayListViewHolder", "Error loading image: ${e.message}")
+            imageView.setImageResource(R.drawable.placeholder)
         }
+
         playListName.text = playList.name
         countView.text = "${playList.trackCount} треков"
     }
