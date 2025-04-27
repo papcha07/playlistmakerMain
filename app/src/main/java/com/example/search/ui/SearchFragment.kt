@@ -333,6 +333,10 @@ class SearchFragment : Fragment(), TrackAdapter.TrackListener {
         }
     }
 
+    override fun onLongClick(track: Track) {
+        TODO("Not yet implemented")
+    }
+
     override fun onResume() {
         super.onResume()
         isClickAllowed = true

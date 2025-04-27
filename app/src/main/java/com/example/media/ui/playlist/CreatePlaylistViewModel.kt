@@ -24,7 +24,11 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
 
 
     private val addedState = MutableLiveData<Boolean?>()
-     fun getAddedState () : LiveData<Boolean?> = addedState
+    fun getAddedState(): LiveData<Boolean?> = addedState
+
+
+    private val trackState = MutableLiveData<List<Track>>()
+    fun getTrackState () : LiveData<List<Track>> = trackState
 
     init {
         backState.value = true
@@ -58,7 +62,14 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
     }
 
 
-    fun addTrackInPlayList(track: Track, playList: PlayList){
+    fun getTracksByPlayListId(id: Int) {
+        viewModelScope.launch {
+            val list = playListInteractor.getTracksById(id).first()
+            trackState.postValue(list)
+        }
+    }
+
+    fun addTrackInPlayList(track: Track, playList: PlayList) {
         viewModelScope.launch {
             val added = playListInteractor.addTrackInPlayList(track, playList)
             addedState.postValue(added)
@@ -68,6 +79,13 @@ class CreatePlaylistViewModel(private val playListInteractor: PlayListInteractor
 
     fun clearAddedState() {
         addedState.postValue(null)
+    }
+
+    fun deleteTrack(track: Track, playList: PlayList) {
+        viewModelScope.launch {
+            playListInteractor.deleteTrack(track, playList)
+            getTracksByPlayListId(playList.id)
+        }
     }
 
 }

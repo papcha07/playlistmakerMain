@@ -91,6 +91,10 @@ class FavoriteFragment : Fragment() , TrackAdapter.TrackListener {
         }
     }
 
+    override fun onLongClick(track: Track) {
+        TODO("Not yet implemented")
+    }
+
     private fun hideStub(){
         binding.iconId.visibility = View.GONE
         binding.mediaTextId.visibility = View.GONE
