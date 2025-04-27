@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin") version "2.5.3" // укажите актуальную версию
+
 }
 
 android {
@@ -10,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.playlistmakermain"
-        minSdk = 31
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

@@ -1,7 +1,7 @@
-package com.example.media.ui
+package com.example.media.ui.playlist
 
 import androidx.lifecycle.ViewModel
 
 class PlaylistViewModel() : ViewModel() {
-    // TODO:
+
 }

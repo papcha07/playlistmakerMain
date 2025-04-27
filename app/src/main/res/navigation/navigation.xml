@@ -8,27 +8,55 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.search.ui.SearchFragment"
-        android:label="Поиск" >
+        android:label="Поиск">
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_searchFragment_to_playerFragment"
+            app:destination="@id/playerFragment">
+        </action>
     </fragment>
+
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.settings.ui.SettingsFragment"
         android:label="Настройки" />
 
-    <activity
-        android:id="@+id/playerActivity"
-        android:name="com.example.player.ui.PlayerActivity"
-        android:label="Плеер"/>
-        <argument
-            android:name="trackKey"
-            app:argType="string"
-        />
+    <argument
+        android:name="trackKey"
+        app:argType="string" />
     <fragment
         android:id="@+id/mediaFragment"
         android:name="com.example.media.ui.MediaFragment"
-        android:label="MediaFragment" />
+        android:label="MediaFragment">
+        <action
+            android:id="@+id/action_mediaFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.example.media.ui.playlist.CreatePlaylistFragment"
+        android:label="fragment_create_playlist"
+        tools:layout="@layout/fragment_create_playlist" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.media.ui.playlist.PlaylistFragment"
+        android:label="PlaylistFragment" />
+
+
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.example.player.ui.PlayerFragment"
+        android:label="PlayerFragment" >
+        <argument
+            android:name="track"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_playerFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
+    </fragment>
+
+
 </navigation>

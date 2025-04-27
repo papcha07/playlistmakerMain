@@ -1,4 +1,4 @@
-package com.example.media.ui
+package com.example.media.ui.favorite
 
 import com.example.search.domain.model.Track
 

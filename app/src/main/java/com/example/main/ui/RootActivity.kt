@@ -2,6 +2,7 @@ package com.example.main.ui
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,6 +20,7 @@ class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -27,6 +29,27 @@ class RootActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
         changeBottomColorState()
+
+        //asdas
+        //asdasd
+
+
+        navController.addOnDestinationChangedListener{
+            _, destination, _ ->
+            when(destination.id){
+                R.id.createPlaylistFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+
+                R.id.playerFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+            }
+        }
+
 
     }
 
@@ -49,5 +72,7 @@ class RootActivity : AppCompatActivity() {
 
 
     }
+
+
 }
 

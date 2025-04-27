@@ -6,9 +6,12 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.example.PLAYLIST_MAKER_PREFERENCES
 import com.example.media.data.FavoriteRepositoryImpl
+import com.example.media.data.PlayListRepositoryImpl
+import com.example.media.data.PlaylistDbConverter
 import com.example.media.data.TrackDbConverter
 import com.example.media.db.TrackDataBase
 import com.example.media.domain.api.FavoriteRepository
+import com.example.media.domain.api.PlayListRepository
 import com.example.player.data.MediaPlayerRepositoryImpl
 import com.example.player.domain.repository.MediaPlayerRepository
 import com.example.search.data.network.NetworkClient
@@ -87,11 +90,22 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), TrackDataBase::class.java, "trackdatabase.db").build()
+        Room.databaseBuilder(androidContext(), TrackDataBase::class.java, "trackdatabase.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     factory {
         TrackDbConverter()
+    }
+
+    //playlist
+    single<PlayListRepository>{
+        PlayListRepositoryImpl(get(), get(), androidContext())
+    }
+
+    factory {
+        PlaylistDbConverter()
     }
 
 }

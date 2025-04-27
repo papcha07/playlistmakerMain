@@ -9,7 +9,7 @@ import okhttp3.Dispatcher
 
 class RetrofitNetworkClient(private val networkService: RetrofitClient) : NetworkClient {
 
-    suspend override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         return try {
             if(dto is TrackSearchRequest){
                 withContext(Dispatchers.IO){
