@@ -121,6 +121,12 @@ class PlayListRepositoryImpl(
         db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
 
+    override suspend fun deletePlayListById(id: Int) {
+        withContext(Dispatchers.IO){
+            db.playListDao().deletePlayList(id)
+        }
+    }
+
     private fun convertToPlayList(list: List<PlaylistEntity>): List<PlayList> {
         return list.map { playlist ->
             val tempPath = fromLocaleStorageToUri(playlist.path)

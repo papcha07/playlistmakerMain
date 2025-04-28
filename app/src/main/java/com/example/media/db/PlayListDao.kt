@@ -1,6 +1,7 @@
 package com.example.media.db
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -20,5 +21,9 @@ interface PlayListDao {
 
     @Update
     suspend fun updatePlayList(playlistEntity: PlaylistEntity)
+
+    @Query("DELETE FROM playlist_table WHERE id == :id")
+    suspend fun deletePlayList(id: Int)
+
 
 }

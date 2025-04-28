@@ -63,4 +63,12 @@ class PlayListInteractorImpl(
         curPlayList.trackCount = trackList.size
         playListRepository.updatePlayList(curPlayList)
     }
+
+    override suspend fun deletePlayListById(id: Int) {
+        playListRepository.deletePlayListById(id)
+    }
+
+    override fun getPlayListById(id: Int): Flow<PlayList>{
+        return playListRepository.getCurrentPlayList(id)
+    }
 }

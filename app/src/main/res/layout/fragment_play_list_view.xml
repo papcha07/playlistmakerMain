@@ -149,8 +149,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
+        android:visibility="visible"
         android:background="@drawable/bottom_dialog_background"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -172,6 +172,7 @@
             android:layout_marginTop="12dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -179,6 +180,11 @@
             >
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/shareBottomId"
+        android:visibility="visible"
+        layout="@layout/share_bottom_layput"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.example.sharing.domain.interactor
 
+import com.example.media.domain.api.PlayList
 import com.example.sharing.data.SharingRepository
 import com.example.sharing.domain.api.SharingInteractorInterface
 import com.example.sharing.domain.model.ShareDataInfo
@@ -17,5 +18,9 @@ class SharingInteractorImpl(val sharingRepository: SharingRepositoryInterface) :
 
     override fun messageSupport(data: ShareDataInfo) {
         sharingRepository.messageSupport(data)
+    }
+
+    override fun shareTrack(playList: PlayList) {
+        sharingRepository.shareTracks(playList)
     }
 }

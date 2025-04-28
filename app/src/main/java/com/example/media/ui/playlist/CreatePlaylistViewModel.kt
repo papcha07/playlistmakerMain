@@ -8,12 +8,14 @@ import com.example.media.domain.api.FavoriteInteractor
 import com.example.media.domain.api.PlayList
 import com.example.media.domain.api.PlayListInteractor
 import com.example.search.domain.model.Track
+import com.example.sharing.domain.api.SharingInteractorInterface
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewModel(
     private val playListInteractor: PlayListInteractor,
-    private val trackInteractor: FavoriteInteractor
+    private val trackInteractor: FavoriteInteractor,
+    private val sharingInteractorInterface: SharingInteractorInterface
 ) : ViewModel() {
 
     private val backState = MutableLiveData<Boolean>()
@@ -25,6 +27,9 @@ class CreatePlaylistViewModel(
     fun getAlbumState(): LiveData<PlayListScreenState> {
         return albumsState
     }
+
+    private val mainScreenAlbumState = MutableLiveData<PlayList>()
+    fun getMainScreenState () : LiveData<PlayList> = mainScreenAlbumState
 
 
     private val addedState = MutableLiveData<Boolean?>()
@@ -90,6 +95,23 @@ class CreatePlaylistViewModel(
         viewModelScope.launch {
             playListInteractor.deleteTrack(track, playList)
             getTracksByPlayListId(playList.id)
+        }
+    }
+
+    fun deletePlayList(id: Int) {
+        viewModelScope.launch {
+            playListInteractor.deletePlayListById(id)
+        }
+    }
+
+    fun shareTrackList(playList: PlayList){
+        sharingInteractorInterface.shareTrack(playList)
+    }
+
+    fun getPlayListById(id: Int){
+        viewModelScope.launch {
+            val playlist = playListInteractor.getPlayListById(id).first()
+            mainScreenAlbumState.postValue(playlist)
         }
     }
 

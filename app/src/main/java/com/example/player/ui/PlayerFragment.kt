@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -43,7 +44,7 @@ class PlayerFragment : Fragment() {
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var track: Track
     private lateinit var playerViewModel: PlayerViewModel
-    private val playlistViewModel: CreatePlaylistViewModel by viewModel()
+    private val playlistViewModel: CreatePlaylistViewModel by activityViewModel()
     private lateinit var adapter: BottomAdapter
     private lateinit var recyclerView: RecyclerView
     private var playListName = ""
@@ -305,6 +306,7 @@ class PlayerFragment : Fragment() {
 
     private fun addTrackInPlayList(track: Track, playList: PlayList) {
         playlistViewModel.addTrackInPlayList(track, playList)
+        playlistViewModel.getPlayListById(playList.id)
     }
 
     private fun showAlreadyAddMessage() {
