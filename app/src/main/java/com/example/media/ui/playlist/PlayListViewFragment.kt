@@ -19,6 +19,8 @@ import com.example.search.ui.TrackAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,6 +32,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     private lateinit var binding: FragmentPlayListViewBinding
     private lateinit var playList: PlayList
     private val playListViewModel: CreatePlaylistViewModel by activityViewModel()
+    private val gson: Gson by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,6 +135,10 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         binding.titleId.text = playList.name
         binding.yearId.text = playList.description ?: ""
         binding.countTrackId.text = playList.trackCount.toString() + " треков"
+
+        val type = object : TypeToken<List<Track>>() {}.type
+        val trackList: MutableList<Track> = gson.fromJson(playList.trackList, type) ?: mutableListOf()
+        binding.minutesId.text = convertToTotalMinutes(trackList)
         fillBottomDialog()
     }
 
@@ -211,9 +218,37 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     private fun observePlayList(){
         playListViewModel.getMainScreenState().observe(viewLifecycleOwner){
             playlist ->
-            playList = playList
+            playList = playlist
             fillScreen()
+            fillBottomDialog()
         }
+    }
+
+    private fun convertToTotalMinutes(trackList: List<Track>): String {
+        if (trackList.isNullOrEmpty()) {
+            return "0 минут"
+        }
+        var totalSeconds = 0L
+        trackList.forEach { track ->
+            try {
+                val parts = track.trackTimeMillis.split(":")
+                if (parts.size == 2) {
+                    val minutes = parts[0].toLong()
+                    val seconds = parts[1].toLong()
+                    totalSeconds += minutes * 60 + seconds
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        val totalMinutes = totalSeconds / 60
+        val remainingSeconds = totalSeconds % 60
+
+        return if (remainingSeconds == 0L) {
+            "$totalMinutes минут"
+        } else {
+            "%.0f минут".format(totalMinutes + remainingSeconds / 60.0)        }
     }
 
 
