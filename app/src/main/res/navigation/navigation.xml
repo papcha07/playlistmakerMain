@@ -77,6 +77,20 @@
         <action
             android:id="@+id/action_playListViewFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_playListViewFragment_to_editPlayListFragment"
+            app:destination="@id/editPlayListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPlayListFragment"
+        android:name="com.example.media.ui.playlist.EditPlayListFragment"
+        android:label="EditPlayListFragment" >
+        <argument
+            android:name="myNumber"
+            app:argType="integer"
+            app:nullable="false"
+            />
     </fragment>
 
 

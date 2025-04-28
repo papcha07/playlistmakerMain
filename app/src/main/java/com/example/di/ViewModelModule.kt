@@ -2,6 +2,7 @@ package com.example.di
 
 import com.example.media.ui.playlist.CreatePlaylistViewModel
 import com.example.media.ui.favorite.FavoriteViewModel
+import com.example.media.ui.playlist.EditPlayListViewModel
 import com.example.media.ui.playlist.PlaylistViewModel
 import com.example.player.ui.PlayerViewModel
 import com.example.search.history.ui.HistoryViewModel
@@ -26,9 +27,8 @@ val viewModelModule = module {
         SettingsViewModel(get(), get())
     }
 
-    viewModel {
-        (url: String) ->
-        PlayerViewModel(get{ parametersOf(url)}, url, get())
+    viewModel { (url: String) ->
+        PlayerViewModel(get { parametersOf(url) }, url, get())
     }
 
     viewModel {
@@ -40,12 +40,19 @@ val viewModelModule = module {
     }
 
 
-    viewModel{
+    viewModel {
         SharedViewModel()
     }
 
     viewModel {
         CreatePlaylistViewModel(get(), get(), get())
+    }
+
+
+    viewModel {
+        EditPlayListViewModel(
+            get()
+        )
     }
 
 

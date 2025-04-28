@@ -12,7 +12,7 @@ import com.example.sharing.domain.api.SharingInteractorInterface
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     private val playListInteractor: PlayListInteractor,
     private val trackInteractor: FavoriteInteractor,
     private val sharingInteractorInterface: SharingInteractorInterface
@@ -28,7 +28,7 @@ class CreatePlaylistViewModel(
         return albumsState
     }
 
-    private val mainScreenAlbumState = MutableLiveData<PlayList>()
+    val mainScreenAlbumState = MutableLiveData<PlayList>()
     fun getMainScreenState () : LiveData<PlayList> = mainScreenAlbumState
 
 

@@ -1,7 +1,6 @@
 package com.example.media.data
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -9,7 +8,6 @@ import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.room.util.foreignKeyCheck
 import com.example.media.db.PlaylistEntity
 import com.example.media.db.TrackDataBase
 import com.example.media.domain.api.PlayList
@@ -117,7 +115,8 @@ class PlayListRepositoryImpl(
     }
 
     override suspend fun updatePlayList(playlist: PlayList) {
-        Log.d("playlistChanged", playlist.trackList)
+        val newpath = saveImageToPrivateStorage(playlist.path)
+        playlist.path = newpath
         db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
 

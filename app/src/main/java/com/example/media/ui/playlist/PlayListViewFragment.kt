@@ -96,6 +96,32 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         val bottomShareBehavior = BottomSheetBehavior.from(bottomShareContainer).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
+
+        binding.moreId.setOnClickListener {
+            bottomShareBehavior.state  = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        bottomBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when(newState){
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
+                    else -> {
+                        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+        })
+
+        binding.shareBottomId.editBottomId.setOnClickListener {
+            val action = PlayListViewFragmentDirections.actionPlayListViewFragmentToEditPlayListFragment(playList.id)
+            findNavController().navigate(action)
+        }
     }
 
     override fun onClick(track: Track) {
@@ -119,6 +145,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             }
         dialog.show()
     }
+
 
 
     private fun fillScreen() {
@@ -165,15 +192,16 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     }
 
     private fun observeTrackList() {
-        playListViewModel.getMainScreenState().observe(viewLifecycleOwner) { playList ->
-            playList?.let {
+        playListViewModel.getMainScreenState().observe(viewLifecycleOwner) { playlist ->
+            playlist?.let {
                 val type = object : TypeToken<List<Track>>() {}.type
                 val tracks = gson.fromJson<List<Track>>(playList.trackList, type) ?: emptyList()
                 trackAdapter.updateData(tracks.toMutableList())
+                playList = playlist
                 fillScreen()
             }
         }
-        playListViewModel.getPlayListById(playList.id)
+//        playListViewModel.getPlayListById(playList.id) возможно важно очень
     }
 
     private fun deletePlaylist() {
@@ -215,6 +243,10 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        playListViewModel.getPlayListById(playList.id)
+    }
 
 
     private fun convertToTotalMinutes(trackList: List<Track>): String {

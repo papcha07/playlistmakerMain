@@ -71,4 +71,8 @@ class PlayListInteractorImpl(
     override fun getPlayListById(id: Int): Flow<PlayList>{
         return playListRepository.getCurrentPlayList(id)
     }
+
+    override suspend fun updatePlayList(playList: PlayList) {
+        playListRepository.updatePlayList(playList)
+    }
 }
