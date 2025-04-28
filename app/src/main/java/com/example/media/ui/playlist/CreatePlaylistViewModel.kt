@@ -95,6 +95,8 @@ class CreatePlaylistViewModel(
         viewModelScope.launch {
             playListInteractor.deleteTrack(track, playList)
             getTracksByPlayListId(playList.id)
+            val updatedPlayList = playListInteractor.getPlayListById(playList.id).first()
+            mainScreenAlbumState.postValue(updatedPlayList)
         }
     }
 

@@ -31,7 +31,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: FragmentPlayListViewBinding
     private lateinit var playList: PlayList
-    private val playListViewModel: CreatePlaylistViewModel by activityViewModel()
+    private val playListViewModel: CreatePlaylistViewModel by viewModel()
     private val gson: Gson by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,13 +90,17 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
 
         shareButtonClick()
         sharePlayList(playList)
-        observePlayList()
+
+
+        val bottomShareContainer = binding.shareBottomId.bottomLayoutId
+        val bottomShareBehavior = BottomSheetBehavior.from(bottomShareContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     override fun onClick(track: Track) {
         val gsonTrack = Gson().toJson(track, Track::class.java)
-        val action =
-            PlayListViewFragmentDirections.actionPlayListViewFragmentToPlayerFragment(gsonTrack)
+        val action = PlayListViewFragmentDirections.actionPlayListViewFragmentToPlayerFragment(gsonTrack)
         findNavController().navigate(action)
     }
 
@@ -112,15 +116,8 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             }
             .setPositiveButton("Да") { dialog, which ->
                 playListViewModel.deleteTrack(track, playList)
-                playListViewModel.getPlayListById(playList.id)
             }
         dialog.show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        playListViewModel.getPlayListById(playList.id)
-        fillScreen()
     }
 
 
@@ -168,11 +165,15 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     }
 
     private fun observeTrackList() {
-        playListViewModel.getTracksByPlayListId(playList.id)
-
-        playListViewModel.getTrackState().observe(viewLifecycleOwner) { state ->
-            trackAdapter.updateData(state.toMutableList())
+        playListViewModel.getMainScreenState().observe(viewLifecycleOwner) { playList ->
+            playList?.let {
+                val type = object : TypeToken<List<Track>>() {}.type
+                val tracks = gson.fromJson<List<Track>>(playList.trackList, type) ?: emptyList()
+                trackAdapter.updateData(tracks.toMutableList())
+                fillScreen()
+            }
         }
+        playListViewModel.getPlayListById(playList.id)
     }
 
     private fun deletePlaylist() {
@@ -189,13 +190,13 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
                 deletePlaylist()
             }
             .setNegativeButton("Нет") { which, dialog ->
+
             }
         dialog.show()
     }
 
     private fun shareButtonClick() {
         binding.shareId.setOnClickListener {
-
             if (playList.trackCount != 0) {
 
             } else {
@@ -211,18 +212,10 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     private fun sharePlayList(playList: PlayList){
         binding.shareBottomId.shareBottomId.setOnClickListener {
             playListViewModel.shareTrackList(playList)
-
         }
     }
 
-    private fun observePlayList(){
-        playListViewModel.getMainScreenState().observe(viewLifecycleOwner){
-            playlist ->
-            playList = playlist
-            fillScreen()
-            fillBottomDialog()
-        }
-    }
+
 
     private fun convertToTotalMinutes(trackList: List<Track>): String {
         if (trackList.isNullOrEmpty()) {

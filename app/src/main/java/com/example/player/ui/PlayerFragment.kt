@@ -44,7 +44,7 @@ class PlayerFragment : Fragment() {
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var track: Track
     private lateinit var playerViewModel: PlayerViewModel
-    private val playlistViewModel: CreatePlaylistViewModel by activityViewModel()
+    private val playlistViewModel: CreatePlaylistViewModel by viewModel()
     private lateinit var adapter: BottomAdapter
     private lateinit var recyclerView: RecyclerView
     private var playListName = ""
