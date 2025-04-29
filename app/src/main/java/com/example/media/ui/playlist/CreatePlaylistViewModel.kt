@@ -32,6 +32,7 @@ open class CreatePlaylistViewModel(
     fun getMainScreenState () : LiveData<PlayList> = mainScreenAlbumState
 
 
+
     private val addedState = MutableLiveData<Boolean?>()
     fun getAddedState(): LiveData<Boolean?> = addedState
 

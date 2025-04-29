@@ -33,6 +33,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
     private lateinit var playList: PlayList
     private val playListViewModel: CreatePlaylistViewModel by viewModel()
     private val gson: Gson by inject()
+    private var counterTrack = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,8 +89,6 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             showDeletePlayListDialog()
         }
 
-        shareButtonClick()
-        sharePlayList(playList)
 
 
         val bottomShareContainer = binding.shareBottomId.bottomLayoutId
@@ -121,6 +120,34 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         binding.shareBottomId.editBottomId.setOnClickListener {
             val action = PlayListViewFragmentDirections.actionPlayListViewFragmentToEditPlayListFragment(playList.id)
             findNavController().navigate(action)
+        }
+
+
+
+        binding.shareBottomId.shareBottomId.setOnClickListener {
+            val current = playListViewModel.getMainScreenState().value
+            if (current!!.trackCount != 0) {
+                playListViewModel.shareTrackList(current)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "В этом плейлисте нет списка треков, которым можно поделиться",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        binding.shareId.setOnClickListener {
+            val current = playListViewModel.getMainScreenState().value
+            if (current!!.trackCount != 0) {
+                playListViewModel.shareTrackList(current)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "В этом плейлисте нет списка треков, которым можно поделиться",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
 
@@ -209,6 +236,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
                 val tracks = gson.fromJson<List<Track>>(playList.trackList, type) ?: emptyList()
                 trackAdapter.updateData(tracks.toMutableList())
                 fillScreen(playlist)
+                playList = it
             }
         }
 //        playListViewModel.getPlayListById(playList.id)
@@ -233,28 +261,8 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         dialog.show()
     }
 
-    private fun shareButtonClick() {
-        binding.shareId.setOnClickListener {
-            if (playList.trackCount != 0) {
-
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "В этом плейлисте нет списка треков, которым можно поделиться",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
 
-    }
-
-    private fun sharePlayList(playList: PlayList){
-        binding.shareBottomId.shareBottomId.setOnClickListener {
-            playListViewModel.shareTrackList(playList)
-        }
-
-    }
 
     override fun onResume() {
         super.onResume()
