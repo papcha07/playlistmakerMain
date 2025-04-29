@@ -11,7 +11,11 @@ import com.example.media.domain.api.PlayList
 import com.example.playlistmakermain.R
 import com.google.android.material.imageview.ShapeableImageView
 
-class PlayListAdapter (private val albumList: MutableList<PlayList>) : RecyclerView.Adapter<PlayListViewHolder>() {
+class PlayListAdapter (
+    private val albumList: MutableList<PlayList>,
+    private val onItemClick: (PlayList) -> Unit
+
+) : RecyclerView.Adapter<PlayListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.playlist_item_view, parent, false)
@@ -24,6 +28,10 @@ class PlayListAdapter (private val albumList: MutableList<PlayList>) : RecyclerV
 
     override fun onBindViewHolder(holder: PlayListViewHolder, position: Int) {
         holder.bind(albumList[position])
+
+        holder.itemView.setOnClickListener {
+            onItemClick(albumList[position])
+        }
     }
 
     fun setContent(list: List<PlayList>) {
@@ -36,18 +44,28 @@ class PlayListAdapter (private val albumList: MutableList<PlayList>) : RecyclerV
 class PlayListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ShapeableImageView = itemView.findViewById(R.id.playlistImageId)
     private val playListName: TextView = itemView.findViewById(R.id.playListNameId)
-    private val countView : TextView = itemView.findViewById(R.id.playListCountId)
+    private val countView: TextView = itemView.findViewById(R.id.playListCountId)
 
-    fun bind(playList: PlayList){
-        val uri = playList.path
-        when{
-            uri == "" -> {
-                imageView.setImageResource(R.drawable.placeholder)
+    fun bind(playList: PlayList) {
+        try {
+            when {
+                playList.path.isNullOrEmpty() -> {
+                    imageView.setImageResource(R.drawable.placeholder)
+                }
+                else -> {
+                    val uri = playList.path!!.toUri()
+                    imageView.setImageURI(uri)
+                    // Добавляем fallback на случай ошибки загрузки
+                    if (imageView.drawable == null) {
+                        imageView.setImageResource(R.drawable.placeholder)
+                    }
+                }
             }
-            else -> {
-                imageView.setImageURI(playList.path?.toUri())
-            }
+        } catch (e: Exception) {
+            Log.e("PlayListViewHolder", "Error loading image: ${e.message}")
+            imageView.setImageResource(R.drawable.placeholder)
         }
+
         playListName.text = playList.name
         countView.text = "${playList.trackCount} треков"
     }

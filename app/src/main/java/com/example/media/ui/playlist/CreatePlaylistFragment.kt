@@ -21,12 +21,12 @@ import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CreatePlaylistFragment : Fragment() {
+open class CreatePlaylistFragment : Fragment() {
 
-    private lateinit var binding: FragmentCreatePlaylistBinding
+    lateinit var binding: FragmentCreatePlaylistBinding
     private val playlistViewModel: CreatePlaylistViewModel by viewModel()
     private lateinit var nameEditText: TextInputEditText
-    private var uriCheck: Uri? = null
+    open var uriCheck: Uri? = null
     private lateinit var descriptionEditText: TextInputEditText
 
     override fun onCreateView(
@@ -98,7 +98,7 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private fun setAlbumImage() {
+      open fun setAlbumImage() {
 
         val photoPicker = registerForActivityResult(
             ActivityResultContracts.PickVisualMedia()
@@ -148,7 +148,7 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private fun createPlaylist() {
+     open fun createPlaylist() {
         binding.createButtonId.setOnClickListener {
             playlistViewModel.savePlayList(
                 PlayList(

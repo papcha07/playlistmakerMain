@@ -9,8 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.media.domain.api.PlayList
+import com.example.media.ui.MediaFragmentDirections
 import com.example.playlistmakermain.R
 import com.example.playlistmakermain.databinding.FragmentPlaylistBinding
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment(){
@@ -36,7 +38,12 @@ class PlaylistFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         openCreatePlaylistFragment()
 
-        adapter = PlayListAdapter(mutableListOf())
+        adapter = PlayListAdapter(mutableListOf()){
+            album ->
+            val jsonAlbum = Gson().toJson(album, PlayList::class.java)
+            val action = MediaFragmentDirections.actionMediaFragmentToPlayListViewFragment(jsonAlbum)
+            findNavController().navigate(action)
+        }
         recyclerView = binding.recyclerViewId
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter

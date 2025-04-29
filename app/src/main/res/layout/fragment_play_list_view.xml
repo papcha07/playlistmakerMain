@@ -1,0 +1,192 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.media.ui.playlist.PlayListViewFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/backButtonId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/arrow_to_left"
+            android:background="@android:color/transparent"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/playlist_theme_color"
+            >
+        </ImageButton>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageId"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+        </com.google.android.material.imageview.ShapeableImageView>
+
+
+        <TextView
+            android:id="@+id/titleId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageId"
+            android:layout_marginLeft="16dp"
+            android:text="Best songs 2021"
+            android:textSize="24sp"
+            android:fontFamily="@font/ys_text_medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="24dp"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/yearId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/titleId"
+            app:layout_constraintTop_toBottomOf="@id/titleId"
+            android:text="2025"
+            android:textSize="18sp"
+            android:fontFamily="@font/ys_text_regular"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/minutesId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/yearId"
+            app:layout_constraintTop_toBottomOf="@id/yearId"
+            android:text="300 минут"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ys_text_regular">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/pointId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/point"
+            app:layout_constraintStart_toEndOf="@id/minutesId"
+            app:layout_constraintTop_toTopOf="@id/minutesId"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/minutesId"
+            android:fontFamily="@font/ys_text_regular">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/countTrackId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/minutesId"
+            app:layout_constraintTop_toTopOf="@id/minutesId"
+            app:layout_constraintBottom_toBottomOf="@id/minutesId"
+            android:text="98 треков"
+            android:textSize="18sp"
+            android:layout_marginLeft="13dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ys_text_regular"
+            app:layout_constraintBaseline_toBaselineOf="@id/minutesId"
+            >
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/shareId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@id/minutesId"
+            app:layout_constraintStart_toStartOf="@id/minutesId"
+            android:background="@android:color/transparent"
+            android:src="@drawable/light_mode"
+            android:layout_marginTop="16dp">
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/moreId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintTop_toTopOf="@id/shareId"
+            app:layout_constraintStart_toEndOf="@id/shareId"
+            app:layout_constraintBottom_toBottomOf="@id/shareId"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_more">
+        </ImageButton>
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/behaviorContainerId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:behavior_peekHeight="240dp"
+        android:visibility="visible"
+        android:background="@drawable/bottom_dialog_background"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_marginTop="8dp"
+            android:id="@+id/scrollPlaceId"
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:background="@drawable/scroll_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+        </View>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewId"
+            app:layout_constraintTop_toBottomOf="@id/scrollPlaceId"
+            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/shareBottomId"
+        android:visibility="visible"
+        layout="@layout/share_bottom_layput"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

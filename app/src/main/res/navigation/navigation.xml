@@ -24,6 +24,8 @@
     <argument
         android:name="trackKey"
         app:argType="string" />
+
+
     <fragment
         android:id="@+id/mediaFragment"
         android:name="com.example.media.ui.MediaFragment"
@@ -34,7 +36,12 @@
         <action
             android:id="@+id/action_mediaFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playListViewFragment"
+            app:destination="@id/playListViewFragment" />
     </fragment>
+
+
     <fragment
         android:id="@+id/createPlaylistFragment"
         android:name="com.example.media.ui.playlist.CreatePlaylistFragment"
@@ -56,6 +63,34 @@
         <action
             android:id="@+id/action_playerFragment_to_createPlaylistFragment"
             app:destination="@id/createPlaylistFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/playListViewFragment"
+        android:name="com.example.media.ui.playlist.PlayListViewFragment"
+        android:label="fragment_play_list_view"
+        tools:layout="@layout/fragment_play_list_view">
+        <argument
+            android:name="albumId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_playListViewFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_playListViewFragment_to_editPlayListFragment"
+            app:destination="@id/editPlayListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPlayListFragment"
+        android:name="com.example.media.ui.playlist.EditPlayListFragment"
+        android:label="EditPlayListFragment" >
+        <argument
+            android:name="myNumber"
+            app:argType="integer"
+            app:nullable="false"
+            />
     </fragment>
 
 

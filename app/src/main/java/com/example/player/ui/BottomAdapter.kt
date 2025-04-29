@@ -47,7 +47,7 @@ class BottomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(playList: PlayList){
         val uri = playList.path
         when{
-            uri == "" -> {
+            uri == null -> {
                 imageView.setImageResource(R.drawable.placeholder)
             }
             else -> {

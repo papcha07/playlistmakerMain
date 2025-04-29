@@ -1,7 +1,6 @@
 package com.example.media.data
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -9,7 +8,6 @@ import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.room.util.foreignKeyCheck
 import com.example.media.db.PlaylistEntity
 import com.example.media.db.TrackDataBase
 import com.example.media.domain.api.PlayList
@@ -50,30 +48,46 @@ class PlayListRepositoryImpl(
             outputFile.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("localeException", "Error in fromLocaleStorageToUri: ${e.stackTraceToString()}")
             null
         }
     }
 
 
     private fun fromLocaleStorageToUri(localPath: String?): String? {
+        if (localPath.isNullOrBlank()) {
+            Log.d("URI_CONVERSION", "Input path is null or blank")
+            return null
+        }
+
         return try {
             val file = File(localPath)
             if (!file.exists()) {
-                return null
-            } else {
-                val bitmap = BitmapFactory.decodeFile(localPath)
-                val tempFile = File.createTempFile("temp_img_", ".jpg", context.cacheDir)
-                FileOutputStream(tempFile).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                }
-                Uri.fromFile(tempFile).toString()
+                Log.d("URI_CONVERSION", "File does not exist: $localPath")
+                return localPath // Возвращаем оригинальный путь
             }
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(localPath, options)
 
+            if (options.outWidth <= 0 || options.outHeight <= 0) {
+                Log.d("URI_CONVERSION", "File is not a valid image: $localPath")
+                return localPath // Возвращаем оригинальный путь
+            }
+
+            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+            } else {
+                Uri.fromFile(file)
+            }
+
+            Log.d("URI_CONVERSION", "Successfully converted to URI: ${uri.toString()}")
+            uri.toString()
+        } catch (e: Exception) {
+            Log.e("URI_CONVERSION", "Error converting path to URI: ${e.message}", e)
+            localPath
+        }
     }
 
 
@@ -96,7 +110,6 @@ class PlayListRepositoryImpl(
         return flow{
             val playListById = db.playListDao().getPlayListById(id)
             val convertedList = playListDbConverter.map(playListById)
-            Log.d("playListById", convertedList.id.toString())
             emit(convertedList)
         }
     }
@@ -104,6 +117,23 @@ class PlayListRepositoryImpl(
     override suspend fun updatePlayList(playlist: PlayList) {
         db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
+
+    override suspend fun deletePlayListById(id: Int) {
+        withContext(Dispatchers.IO){
+            db.playListDao().deletePlayList(id)
+        }
+    }
+
+    override suspend fun updatePlayListAfterChange(playlist: PlayList) {
+        if (!playlist.path.isNullOrBlank()) {
+            val newPath = saveImageToPrivateStorage(playlist.path)
+            if (newPath != null) {
+                playlist.path = newPath
+            }
+        }
+        db.playListDao().updatePlayList(playListDbConverter.map(playlist))
+    }
+
 
     private fun convertToPlayList(list: List<PlaylistEntity>): List<PlayList> {
         return list.map { playlist ->
