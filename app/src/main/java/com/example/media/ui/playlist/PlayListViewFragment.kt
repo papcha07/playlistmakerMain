@@ -52,6 +52,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showEmptyPlayListMessage()
         initRv()
         observeTrackList()
         fillScreen(playList)
@@ -114,6 +115,8 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
+
+
 
         })
 
@@ -295,6 +298,12 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             "$totalMinutes минут"
         } else {
             "%.0f минут".format(totalMinutes + remainingSeconds / 60.0)        }
+    }
+
+    private fun showEmptyPlayListMessage(){
+        if(playList.trackCount == 0 ){
+            Toast.makeText(requireContext(), "В этом плейлисте нет треков", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

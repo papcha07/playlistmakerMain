@@ -33,7 +33,7 @@ class PlayListInteractorImpl(
         if (trackList.any { it.trackId == track.trackId }) {
             return false
         } else {
-            trackList.add(track)
+            trackList.add(0,track)
             val newTrackList = Gson().toJson(trackList)
             currentPlayList.trackList = newTrackList
             currentPlayList.trackCount = trackList.size
