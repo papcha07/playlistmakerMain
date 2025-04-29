@@ -122,6 +122,8 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             val action = PlayListViewFragmentDirections.actionPlayListViewFragmentToEditPlayListFragment(playList.id)
             findNavController().navigate(action)
         }
+
+
     }
 
     override fun onClick(track: Track) {
@@ -163,6 +165,13 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
 
         val type = object : TypeToken<List<Track>>() {}.type
         val trackList: MutableList<Track> = gson.fromJson(playList.trackList, type) ?: mutableListOf()
+        if(trackList.isNullOrEmpty()){
+            binding.behaviorContainerId.visibility = View.GONE
+            binding.overlay.visibility = View.GONE
+        } else{
+            binding.behaviorContainerId.visibility = View.VISIBLE
+            binding.overlay.visibility = View.VISIBLE
+        }
         trackAdapter.updateData(trackList)
         binding.minutesId.text = convertToTotalMinutes(trackList)
         fillBottomDialog(playList)
@@ -236,12 +245,15 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
                 ).show()
             }
         }
+
+
     }
 
     private fun sharePlayList(playList: PlayList){
         binding.shareBottomId.shareBottomId.setOnClickListener {
             playListViewModel.shareTrackList(playList)
         }
+
     }
 
     override fun onResume() {
