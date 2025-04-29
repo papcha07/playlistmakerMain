@@ -40,6 +40,7 @@ class EditPlayListFragment : CreatePlaylistFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.createButtonId.setText("Сохранить")
         viewModel.getPlaylistData.observe(viewLifecycleOwner){
             newplaylist ->
             fillScreen(newplaylist)

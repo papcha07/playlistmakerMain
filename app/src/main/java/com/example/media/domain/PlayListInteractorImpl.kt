@@ -75,4 +75,8 @@ class PlayListInteractorImpl(
     override suspend fun updatePlayList(playList: PlayList) {
         playListRepository.updatePlayList(playList)
     }
+
+    override suspend fun updatePlayListAfterChange(playList: PlayList) {
+        playListRepository.updatePlayListAfterChange(playList)
+    }
 }

@@ -29,7 +29,7 @@ class EditPlayListViewModel(
 
     fun updatePlayList(playList: PlayList){
         viewModelScope.launch {
-            playListInteractor.updatePlayList(playList)
+            playListInteractor.updatePlayListAfterChange(playList)
         }
     }
 

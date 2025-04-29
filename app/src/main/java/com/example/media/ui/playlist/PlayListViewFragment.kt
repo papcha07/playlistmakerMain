@@ -59,7 +59,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         val bottomBehaviorContainer = binding.behaviorContainerId
         binding.overlay.visibility = View.VISIBLE
         val bottomBehavior = BottomSheetBehavior.from(bottomBehaviorContainer).apply {
-            state = BottomSheetBehavior.STATE_COLLAPSED
+            state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         bottomBehavior.apply {
@@ -201,7 +201,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
                 fillScreen()
             }
         }
-//        playListViewModel.getPlayListById(playList.id) возможно важно очень
+        playListViewModel.getPlayListById(playList.id)
     }
 
     private fun deletePlaylist() {

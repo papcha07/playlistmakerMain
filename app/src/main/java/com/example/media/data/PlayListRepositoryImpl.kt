@@ -115,8 +115,6 @@ class PlayListRepositoryImpl(
     }
 
     override suspend fun updatePlayList(playlist: PlayList) {
-        val newpath = saveImageToPrivateStorage(playlist.path)
-        playlist.path = newpath
         db.playListDao().updatePlayList(playListDbConverter.map(playlist))
     }
 
@@ -125,6 +123,17 @@ class PlayListRepositoryImpl(
             db.playListDao().deletePlayList(id)
         }
     }
+
+    override suspend fun updatePlayListAfterChange(playlist: PlayList) {
+        if (!playlist.path.isNullOrBlank()) {
+            val newPath = saveImageToPrivateStorage(playlist.path)
+            if (newPath != null) {
+                playlist.path = newPath
+            }
+        }
+        db.playListDao().updatePlayList(playListDbConverter.map(playlist))
+    }
+
 
     private fun convertToPlayList(list: List<PlaylistEntity>): List<PlayList> {
         return list.map { playlist ->
