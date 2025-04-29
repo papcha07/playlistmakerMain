@@ -53,7 +53,7 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
         super.onViewCreated(view, savedInstanceState)
         initRv()
         observeTrackList()
-        fillScreen()
+        fillScreen(playList)
         goBack()
 
         val bottomBehaviorContainer = binding.behaviorContainerId
@@ -142,13 +142,14 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
             }
             .setPositiveButton("Да") { dialog, which ->
                 playListViewModel.deleteTrack(track, playList)
+                playListViewModel.getPlayListById(playList.id)
             }
         dialog.show()
     }
 
 
 
-    private fun fillScreen() {
+    private fun fillScreen(playList: PlayList) {
         val uri = playList.path
         if (uri == null) {
             binding.imageId.setImageResource(R.drawable.placeholder)
@@ -162,11 +163,12 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
 
         val type = object : TypeToken<List<Track>>() {}.type
         val trackList: MutableList<Track> = gson.fromJson(playList.trackList, type) ?: mutableListOf()
+        trackAdapter.updateData(trackList)
         binding.minutesId.text = convertToTotalMinutes(trackList)
-        fillBottomDialog()
+        fillBottomDialog(playList)
     }
 
-    private fun fillBottomDialog(){
+    private fun fillBottomDialog(playList: PlayList){
         val uri = playList.path
         if (uri == null) {
             binding.shareBottomId.playlistImage.setImageResource(R.drawable.placeholder)
@@ -197,11 +199,10 @@ class PlayListViewFragment : Fragment(), TrackAdapter.TrackListener {
                 val type = object : TypeToken<List<Track>>() {}.type
                 val tracks = gson.fromJson<List<Track>>(playList.trackList, type) ?: emptyList()
                 trackAdapter.updateData(tracks.toMutableList())
-                playList = playlist
-                fillScreen()
+                fillScreen(playlist)
             }
         }
-        playListViewModel.getPlayListById(playList.id)
+//        playListViewModel.getPlayListById(playList.id)
     }
 
     private fun deletePlaylist() {
